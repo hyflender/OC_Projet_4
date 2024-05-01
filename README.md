@@ -24,7 +24,7 @@ To set up the Chess Tournament Manager on your local machine, follow these steps
 1. **Clone the repository (optional):**
 
    ```bash
-   git clone https://github.com/yourusername/chess-tournament-manager.git
+   git clone https://github.com/hyflender/OC_Projet_4.git
    cd chess-tournament-manager
 
 2. **Set up a virtual environment (recommended):**
