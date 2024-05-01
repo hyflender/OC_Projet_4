@@ -64,7 +64,7 @@ Please make sure to update tests as appropriate.
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
 ## Support
-For support, email fakeemail@provider.com or join our Slack channel.
+For support, email ...@...
 
 
 This README is straightforward and provides the necessary information for anyone who wants to use, understand, or contribute to your project. You might need to adjust the URLs, contact information, and details specific to how you plan to manage contributions and community interactions.
