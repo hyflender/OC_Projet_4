@@ -1,5 +1,5 @@
 from views.menu import PlayerView
-from controllers.controller_player import PlayerController
+from controllers.player_controller import PlayerController
 
 
 def main():
