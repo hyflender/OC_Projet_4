@@ -1,42 +1,19 @@
-from models.player import Player
+from views.menu import PlayerView
+from controllers.menu_player import PlayerController
 
 
 def main():
+    # Create the view instance
+    view = PlayerView()
 
-    players = []
+    # Create the model, which in this simple case is just a list of Player objects
+    model = []
 
-    while True:
+    # Initialize the controller with the view and model
+    controller = PlayerController(view, model)
 
-        print("Welcome to Chest Club Manager")
-        print("-----------------------------")
-        print("Please select an option:")
-        print("1. Create a new player")
-        print("2. Update a player's score")
-        print("3. View all players")
-        print("4. Exit")
-
-        choice = input("Enter the number of the option you want to select: ")
-
-        if choice == "1":
-            # Create a new player
-            first_name = input("Enter player's first name: ")
-            last_name = input("Enter player's last name: ")
-            birth_date = input("Enter player's birth date (YYYY-MM-DD): ")
-            chess_id = input("Enter player's chess ID: ")
-            new_player = Player(first_name, last_name, birth_date, chess_id)
-            players.append(new_player)
-            print(f"Player {first_name} {last_name} created successfully!")
-
-        elif choice == "2":
-            # Update a player's score
-            pass
-        elif choice == "3":
-            # View all players
-            for player in players:
-                print(player.__dict__)
-        elif choice == "4":
-            # Exit
-            break
+    # Run the application
+    controller.run()
 
 
 if __name__ == "__main__":
