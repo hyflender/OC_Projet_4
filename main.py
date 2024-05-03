@@ -1,16 +1,9 @@
-from views.menu import PlayerView
-from controllers.player_controller import PlayerController
+from controllers.main_controller import GlobalController
 
 
 def main():
-    # Create the view instance
-    view = PlayerView()
-
-    # Create the model, which in this simple case is just a list of Player objects
-    model = []
-
-    # Initialize the controller with the view and model
-    controller = PlayerController(view, model)
+    # Initialize the global controller
+    controller = GlobalController()
 
     # Run the application
     controller.run()
