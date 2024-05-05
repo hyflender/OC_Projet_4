@@ -12,5 +12,5 @@ class PlayerView:
         print("1. Create a new player")
         print("2. Update a player")
         print("3. Update a player's score")
-        print("5. View all players")
-        print("6. Go back to main menu")
+        print("4. View all players")
+        print("5. Go back to main menu")
