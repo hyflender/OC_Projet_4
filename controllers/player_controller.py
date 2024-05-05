@@ -21,23 +21,23 @@ class PlayerController:
             if choice == "1":
                 self.create_player()
             elif choice == "2":
-                pass
+                self.update_player()
             elif choice == "3":
-                self.view_all_players()
+                self.update_score()
             elif choice == "4":
+                self.view_all_players()
+            elif choice == "5":
                 Library.display_message("Exiting the player management menu.")
                 break
             else:
                 Library.display_message(
-                    "Invalid choice. Please enter a number between 1 and 4."
+                    "Invalid choice. Please enter a number between 1 and 5."
                 )
 
     def create_player(self):
         first_name = Library.get_user_input("Enter player's first name: ")
         last_name = Library.get_user_input("Enter player's last name: ")
-        birth_date = Library.get_user_input(
-            "Enter player's birth date (YYYY-MM-DD): "
-        )
+        birth_date = Library.get_user_input("Enter player's birth date (YYYY-MM-DD): ")
         chess_id = Library.get_user_input("Enter player's chess ID: ")
         new_player = Player(first_name, last_name, birth_date, chess_id)
         self.players.append(new_player)
@@ -45,6 +45,38 @@ class PlayerController:
             f"Player {first_name} {last_name} created successfully!"
         )
         self.save_players()
+
+    def update_player(self):
+        chess_id = Library.get_user_input(
+            "Enter the chess ID of the player you want to update: "
+        )
+        player = next(
+            (player for player in self.players if player.chess_id == chess_id), None
+        )
+        if player:
+            player.first_name = Library.get_user_input("Enter the new first name: ")
+            player.last_name = Library.get_user_input("Enter the new last name: ")
+            player.birth_date = Library.get_user_input(
+                "Enter the new birth date (YYYY-MM-DD): "
+            )
+            self.save_players()
+            Library.display_message("Player updated successfully!")
+        else:
+            Library.display_message("Player not found.")
+
+    def update_score(self):
+        chess_id = Library.get_user_input(
+            "Enter the chess ID of the player you want to update: "
+        )
+        player = next(
+            (player for player in self.players if player.chess_id == chess_id), None
+        )
+        if player:
+            player.score = Library.get_user_input("Enter the new score: ")
+            self.save_players()
+            Library.display_message("Score updated successfully!")
+        else:
+            Library.display_message("Player not found.")
 
     def view_all_players(self):
         if not self.players:
@@ -55,11 +87,16 @@ class PlayerController:
 
     def save_players(self):
         with open("data/players.json", "w") as file:
-            json.dump([player.to_dict() for player in self.players], file)
+            json.dump(
+                [player.to_dict() for player in self.players],
+                file,
+                sort_keys=True,
+                indent=4,
+            )
 
     def load_players(self):
         try:
-            with open("players.json", "r") as file:
+            with open("data/players.json", "r") as file:
                 players_data = json.load(file)
                 self.players = [Player(**data) for data in players_data]
         except FileNotFoundError:
