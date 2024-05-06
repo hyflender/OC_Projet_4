@@ -5,8 +5,6 @@ from views.main_view import MainView
 from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
 
-from GUI.chest_gui import start_chest_gui
-
 
 class GlobalController:
     def __init__(self):
@@ -35,7 +33,6 @@ class GlobalController:
             elif choice == "5":
                 pass
             elif choice == "6":
-                start_chest_gui()
                 break
             elif choice == "7":
                 Library.display_message("Exiting the player management menu.")
