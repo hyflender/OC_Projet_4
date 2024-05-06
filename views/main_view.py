@@ -1,7 +1,14 @@
+from test.plateau import Plateau
+
 # The Main Menu View - This is the first view that the user sees when they run the program.
 
 
 class MainView:
+    def __init__(self) -> None:
+        # Show the graphical game board
+        self.plateau = Plateau()
+        self.plateau.afficher_plateau()
+
     def display_global_menu(self):
         """
         Displays the main menu options to the user.
