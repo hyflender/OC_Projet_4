@@ -2,14 +2,15 @@ from models.Player import Player
 from views.player_view import PlayerView
 
 from utils.chest import Library
-import json
+from utils.data_manager import PlayersData
 
 
 class PlayerController:
     def __init__(self):
         self.view = PlayerView()
+        self.data = PlayersData()
         self.players = []
-        self.load_players()
+        self.players = self.data.load_players()
 
     def run(self):
         while True:
@@ -44,7 +45,7 @@ class PlayerController:
         Library.display_message(
             f"Player {first_name} {last_name} created successfully!"
         )
-        self.save_players()
+        self.data.save_players(self.players)
 
     def update_player(self):
         chess_id = Library.get_user_input(
@@ -59,7 +60,7 @@ class PlayerController:
             player.birth_date = Library.get_user_input(
                 "Enter the new birth date (YYYY-MM-DD): "
             )
-            self.save_players()
+            self.data.save_players(self.players)
             Library.display_message("Player updated successfully!")
         else:
             Library.display_message("Player not found.")
@@ -73,7 +74,7 @@ class PlayerController:
         )
         if player:
             player.score = Library.get_user_input("Enter the new score: ")
-            self.save_players()
+            self.data.save_players(self.players)
             Library.display_message("Score updated successfully!")
         else:
             Library.display_message("Player not found.")
@@ -84,20 +85,3 @@ class PlayerController:
         else:
             for player in self.players:
                 print(player.__dict__)
-
-    def save_players(self):
-        with open("data/players.json", "w") as file:
-            json.dump(
-                [player.to_dict() for player in self.players],
-                file,
-                sort_keys=True,
-                indent=4,
-            )
-
-    def load_players(self):
-        try:
-            with open("data/players.json", "r") as file:
-                players_data = json.load(file)
-                self.players = [Player(**data) for data in players_data]
-        except FileNotFoundError:
-            self.players = []
