@@ -4,6 +4,8 @@ from views.player_view import PlayerView
 from utils.chest import Library
 from utils.data_manager import PlayersData
 
+from tabulate import tabulate
+
 
 class PlayerController:
     def __init__(self):
@@ -83,5 +85,5 @@ class PlayerController:
         if not self.players:
             Library.display_message("No players have been created yet.")
         else:
-            for player in self.players:
-                print(player.__dict__)
+            player_data = [player.__dict__ for player in self.players]
+            print(tabulate(player_data, headers="keys", tablefmt="rounded_outline"))
