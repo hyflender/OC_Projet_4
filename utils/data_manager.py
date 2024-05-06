@@ -1,4 +1,5 @@
 from models.Player import Player
+from models.Tournament import Tournament
 import json
 
 
@@ -45,6 +46,34 @@ class PlayersData:
                 return players
         except FileNotFoundError:
             print("No players data found")
+        except json.JSONDecodeError:
+            print("Error decoding JSON from file")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+
+class TournamentsData:
+    def __init__(self):
+        self.tournaments = []
+
+    def save_tournaments(self, tournaments):
+        with open("data/tournaments.json", "w") as file:
+            json.dump(
+                [tournament.to_dict() for tournament in tournaments],
+                file,
+                sort_keys=True,
+                indent=4,
+            )
+
+    @staticmethod
+    def load_tournaments():
+        try:
+            with open("data/tournaments.json", "r") as file:
+                tournaments_data = json.load(file)
+                tournaments = [Tournament(**data) for data in tournaments_data]
+                return tournaments
+        except FileNotFoundError:
+            print("No tournaments data found")
         except json.JSONDecodeError:
             print("Error decoding JSON from file")
         except Exception as e:
