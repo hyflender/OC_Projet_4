@@ -1,3 +1,4 @@
+from tabulate import tabulate
 from models.Tournament import Tournament
 from views.tournament_view import TournamentView
 
@@ -70,5 +71,5 @@ class TournamentController:
         if not self.tournaments:
             Library.display_message("No tournaments have been created yet.")
         else:
-            for tournament in self.tournaments:
-                print(tournament.__dict__)
+            tournament_data = [tournament.__dict__ for tournament in self.tournaments]
+            print(tabulate(tournament_data, headers="keys", tablefmt="rounded_outline"))
