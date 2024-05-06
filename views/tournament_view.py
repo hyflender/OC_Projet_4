@@ -15,7 +15,7 @@ class TournamentView:
         print("4. Go back to main menu")
         print("----------------------------------------")
 
-    def display_existing_tournament_menu(self):
+    def display_tournament_submenu(self):
         """
         Displays the menu for managing an existing tournament.
         """
