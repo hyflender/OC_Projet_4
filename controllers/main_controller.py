@@ -25,6 +25,12 @@ class GlobalController:
                 self.player_controller.run()
             elif choice == "2":
                 self.tournament_controller.run()
+            elif choice == "3":
+                pass
+            elif choice == "4":
+                pass
+            elif choice == "5":
+                pass
             elif choice == "6":
                 start_chest_gui()
                 break
@@ -33,5 +39,5 @@ class GlobalController:
                 break
             else:
                 Library.display_message(
-                    "Invalid choice. Please enter a number between 1 and 4."
+                    "Invalid choice. Please enter a number between 1 and 7."
                 )
