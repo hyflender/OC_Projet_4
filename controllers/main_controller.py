@@ -10,6 +10,9 @@ from GUI.chest_gui import start_chest_gui
 
 class GlobalController:
     def __init__(self):
+        """
+        Initializes the GlobalController class, setting up the main view and controllers for players and tournaments.
+        """
         self.view = MainView()
         self.player_controller = PlayerController()
         self.tournament_controller = TournamentController()
