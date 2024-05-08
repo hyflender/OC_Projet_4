@@ -1,3 +1,6 @@
+import json
+
+
 # Definition of the Player class
 class Player:
     """Represents a chess player in a tournament."""
@@ -17,12 +20,14 @@ class Player:
         self.chess_id = chess_id
         self.score = score
 
-    def update_score(self, score):
-        """Updates the player's score by adding the specified score to their current score.
+    def update_player(self, first_name, last_name, birth_date, chess_id):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.birth_date = birth_date
+        self.chess_id = chess_id
 
-        Args:
-            score (int): The score to be added to the player's current score.
-        """
+    def update_score(self, score):
+        """Update the score of a player by adding the given score to the current score."""
         self.score += score
 
     def to_dict(self):
@@ -34,3 +39,35 @@ class Player:
             "chess_id": self.chess_id,
             "score": self.score,
         }
+
+    def save_player(self):
+        """Saves the player instance to the players.json file, updating if the chess_id already exists."""
+        try:
+            with open("data/players.json", "r") as file:
+                players = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            players = []
+
+        # Check if the player with the same chess_id already exists
+        updated = False
+        for i, player in enumerate(players):
+            if player["chess_id"] == self.chess_id:
+                players[i] = self.to_dict()  # Update the existing player
+                updated = True
+                break
+
+        if not updated:
+            players.append(self.to_dict())  # Add new player if not found
+
+        with open("data/players.json", "w") as file:
+            json.dump(players, file, indent=4, sort_keys=True)
+
+    @staticmethod
+    def load_players():
+        """Load all players from the players.json file and convert to player instance."""
+        try:
+            with open("data/players.json", "r") as file:
+                players = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            players = []
+        return [Player(**player) for player in players]

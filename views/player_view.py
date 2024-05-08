@@ -1,8 +1,15 @@
+import re
+from tabulate import tabulate
+
+from utils.library import get_user_input, get_valid_date, get_valid_chess_id
+
 # The menu for managing players - This class is responsible for displaying the menu for managing players.
 
 
 class PlayerView:
-    def display_player_menu(self):
+
+    @staticmethod
+    def display_player_menu():
         """
         Displays the menu for managing players.
         """
@@ -14,3 +21,45 @@ class PlayerView:
         print("3. Update a player's score")
         print("4. View all players")
         print("5. Go back to main menu")
+
+    @staticmethod
+    def get_player_details():
+        """Get the player details from the user."""
+        first_name = get_user_input("Enter the player's first name: ")
+        last_name = get_user_input("Enter the player's last name: ")
+        birth_date = get_valid_date("Enter the player's birth date: ")
+        chess_id = get_valid_chess_id("Enter the player's chess ID: ")
+        return first_name, last_name, birth_date, chess_id
+
+    @staticmethod
+    def get_user_chess_id():
+        """Get the user chess id from the user."""
+        chess_id = get_user_input("Enter the player's chess ID: ")
+
+        while not re.match(r"^[A-Z]{2}\d{5}$", chess_id):
+            chess_id = get_user_input(
+                "Invalid format. Please enter a chess ID in the format AB12345: "
+            )
+        return chess_id
+
+    @staticmethod
+    def get_new_score():
+        """Get the new score from the user."""
+        new_score = int(get_user_input("Enter the new score: "))
+        return new_score
+
+    def display_player(player):
+        """Display a player."""
+        try:
+            print(tabulate(player, headers="keys", tablefmt="rounded_outline"))
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    @staticmethod
+    def display_all_players(players):
+        if not players:
+            print("No players have been created yet.")
+        else:
+            # Convert Player objects to dictionaries
+            players_dicts = [player.__dict__ for player in players]
+            print(tabulate(players_dicts, headers="keys", tablefmt="rounded_outline"))

@@ -1,23 +1,67 @@
 from models.Player import Player
 from views.player_view import PlayerView
 
-from utils.chest import Library
-from utils.data_manager import PlayersData
-
-from tabulate import tabulate
+from utils.library import log, get_user_input, clear_console
 
 
 class PlayerController:
     def __init__(self):
         self.view = PlayerView()
-        self.data = PlayersData()
-        self.players = []
-        self.players = self.data.load_players()
+        self.players = Player.load_players()
+
+    def create_player(self):
+        # Method to create a new player
+        first_name, last_name, birth_date, chess_id = self.view.get_player_details()
+        new_player = Player(first_name, last_name, birth_date, chess_id)
+        new_player.save_player()
+        self.players = Player.load_players()
+        log(
+            f"Player {new_player.first_name} {new_player.last_name} created successfully."
+        )
+
+    def update_player(self):
+        # Method to update informations of a player
+        self.view.display_all_players(self.players)
+        chess_id = get_user_input("Enter the player's chess ID: ")
+        self.players = Player.load_players()
+        for player in self.players:
+            if player.chess_id == chess_id:
+                first_name, last_name, birth_date, chess_id = (
+                    self.view.get_player_details()
+                )
+                player.update_player(first_name, last_name, birth_date, chess_id)
+                player.save_player()
+                log(
+                    f"Player {player.first_name} {player.last_name} updated successfully."
+                )
+
+    def update_score_player(self):
+        # Method to update the score of a player
+        self.view.display_all_players(self.players)
+        chess_id = self.view.get_user_chess_id()
+
+        self.players = Player.load_players()
+        player_found = False
+        for player in self.players:
+            if player.chess_id == chess_id:
+                new_score = self.view.get_new_score()
+                player.score = new_score
+                player.save_player()
+                log(
+                    f"Player {player.first_name} {player.last_name} updated successfully."
+                )
+                player_found = True
+                break
+        if not player_found:
+            log("No player found with the given chess ID.")
 
     def run(self):
+        clear_console()
         while True:
+            # Display the player menu
             self.view.display_player_menu()
-            choice = Library.get_user_input(
+            # Get the user choice
+            choice = get_user_input(
                 "Enter the number of the option you want to select: "
             )
 
@@ -26,64 +70,11 @@ class PlayerController:
             elif choice == "2":
                 self.update_player()
             elif choice == "3":
-                self.update_score()
+                self.update_score_player()
             elif choice == "4":
-                self.view_all_players()
+                self.view.display_all_players(self.players)
             elif choice == "5":
-                Library.display_message("Exiting the player management menu.")
+                log("Exiting the player management menu.")
                 break
             else:
-                Library.display_message(
-                    "Invalid choice. Please enter a number between 1 and 5."
-                )
-
-    def create_player(self):
-        first_name = Library.get_user_input("Enter player's first name: ")
-        last_name = Library.get_user_input("Enter player's last name: ")
-        birth_date = Library.get_user_input("Enter player's birth date (YYYY-MM-DD): ")
-        chess_id = Library.get_user_input("Enter player's chess ID: ")
-        new_player = Player(first_name, last_name, birth_date, chess_id)
-        self.players.append(new_player)
-        Library.display_message(
-            f"Player {first_name} {last_name} created successfully!"
-        )
-        self.data.save_players(self.players)
-
-    def update_player(self):
-        chess_id = Library.get_user_input(
-            "Enter the chess ID of the player you want to update: "
-        )
-        player = next(
-            (player for player in self.players if player.chess_id == chess_id), None
-        )
-        if player:
-            player.first_name = Library.get_user_input("Enter the new first name: ")
-            player.last_name = Library.get_user_input("Enter the new last name: ")
-            player.birth_date = Library.get_user_input(
-                "Enter the new birth date (YYYY-MM-DD): "
-            )
-            self.data.save_players(self.players)
-            Library.display_message("Player updated successfully!")
-        else:
-            Library.display_message("Player not found.")
-
-    def update_score(self):
-        chess_id = Library.get_user_input(
-            "Enter the chess ID of the player you want to update: "
-        )
-        player = next(
-            (player for player in self.players if player.chess_id == chess_id), None
-        )
-        if player:
-            player.score = Library.get_user_input("Enter the new score: ")
-            self.data.save_players(self.players)
-            Library.display_message("Score updated successfully!")
-        else:
-            Library.display_message("Player not found.")
-
-    def view_all_players(self):
-        if not self.players:
-            Library.display_message("No players have been created yet.")
-        else:
-            player_data = [player.__dict__ for player in self.players]
-            print(tabulate(player_data, headers="keys", tablefmt="rounded_outline"))
+                log("Invalid choice. Please enter a number between 1 and 5.")

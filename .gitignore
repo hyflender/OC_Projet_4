@@ -1,6 +1,6 @@
 *.db
 /data/
-/test/
+/temp/
 /GUI/
 # Byte-compiled / optimized / DLL files
 __pycache__/
