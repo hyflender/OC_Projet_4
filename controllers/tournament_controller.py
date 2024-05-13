@@ -1,4 +1,4 @@
-from models.Tournament import Tournament
+from models.tournament import Tournament
 from views.tournament_view import TournamentView
 
 from utils.library import log, get_user_choice, clear_console
