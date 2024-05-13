@@ -1,7 +1,7 @@
 import re
 from tabulate import tabulate
 
-from utils.library import get_user_input, get_valid_date, get_valid_chess_id
+from utils.library import get_user_input, get_valid_date, get_valid_chess_id, log
 
 # The menu for managing players - This class is responsible for displaying the menu for managing players.
 
@@ -28,7 +28,9 @@ class PlayerView:
         first_name = get_user_input("Enter the player's first name: ")
         last_name = get_user_input("Enter the player's last name: ")
         birth_date = get_valid_date("Enter the player's birth date: ")
-        chess_id = get_valid_chess_id("Enter the player's chess ID: ")
+        chess_id = get_valid_chess_id(
+            "Enter the player's chess ID: ", must_be_unique=True
+        )
         return first_name, last_name, birth_date, chess_id
 
     @staticmethod
@@ -60,6 +62,11 @@ class PlayerView:
         if not players:
             print("No players have been created yet.")
         else:
-            # Convert Player objects to dictionaries
-            players_dicts = [player.__dict__ for player in players]
-            print(tabulate(players_dicts, headers="keys", tablefmt="rounded_outline"))
+            log("List of players:")
+            print(
+                tabulate(
+                    [player.to_dict() for player in players],
+                    headers="keys",
+                    tablefmt="rounded_outline",
+                )
+            )
