@@ -1,7 +1,6 @@
 import datetime
 import logging
 import os
-from pprint import pprint
 import re
 import json
 
@@ -14,7 +13,7 @@ def log(message):
         message (str): The message to be displayed.
     """
 
-    pprint(message)
+    print(message)
 
     if not os.path.exists("logs"):
         os.makedirs("logs")
@@ -42,53 +41,38 @@ def get_user_input(prompt):
     return input(prompt)
 
 
-def validate_date(date_str):
-    """Validate the date format and return a datetime object if valid, else None."""
-    try:
-        datetime.datetime.strptime(date_str, "%d-%m-%Y")
-        return date_str
-    except ValueError:
-        log("Invalid date format, please use DD-MM-YYYY.")
-        return None
-
-
-def get_valid_date(prompt):
-    """Keep asking for input until a valid date is entered."""
+def get_valid_date(prompt, edit=False):
+    """Prompt for a date and validate its format, keep asking until a valid date is entered."""
     while True:
         date_input = get_user_input(prompt)
-        date = validate_date(date_input)
-        if date:
-            return date
+        try:
+            # if the user wants to edit and the date is empty, return the date
+            if edit and date_input == "":
+                return date_input
+            datetime.datetime.strptime(date_input, "%d-%m-%Y")
+            return date_input
+        except ValueError:
+            log("Invalid date format, please use DD-MM-YYYY.")
 
 
-def validate_chess_id(chess_id):
-    """Validate the chess id format and check its uniqueness."""
-    try:
-        if not re.match(r"^[A-Z]{2}\d{5}$", chess_id):
-            raise ValueError(
-                "Invalid format, please use 2 uppercase letters followed by 5 digits."
-            )
-
-        with open("data/players.json", "r") as file:
-            players = json.load(file)
-            for player in players:
-                if player["chess_id"] == chess_id:
-                    raise ValueError("ID already exists")
-
-        return chess_id
-
-    except ValueError as e:
-        log(str(e))
-        return None
-
-
-def get_valid_chess_id(prompt):
-    """Keep asking for input until a valid chess id is entered."""
+def get_valid_chess_id(prompt, edit=False):
+    """Prompt for a chess ID, validate its format and check its uniqueness, keep asking until a valid ID is entered."""
     while True:
-        chess_id_input = get_user_input(prompt)
-        chess_id = validate_chess_id(chess_id_input)
-        if chess_id:
+        chess_id = get_user_input(prompt)
+        try:
+            if not re.match(r"^[A-Z]{2}\d{5}$", chess_id):
+                raise ValueError(
+                    "Invalid format, please use 2 uppercase letters followed by 5 digits."
+                )
+            if not edit:
+                with open("data/players.json", "r") as file:
+                    players = json.load(file)
+                for player in players:
+                    if player["chess_id"] == chess_id:
+                        raise ValueError("ID already exists")
             return chess_id
+        except ValueError as e:
+            log(str(e))
 
 
 def clear_console():
@@ -100,13 +84,27 @@ def clear_console():
         os.system("clear")
 
 
-def get_user_choice(prompt, choices):
+def get_user_choice(number_choices):
     while True:
-        choice = get_user_input(prompt)
-        if choice in choices:
-            return choice
-        else:
-            log("Invalid choice, please try again.")
+        choice = get_user_input("Enter the number of the option you want to select: ")
+        try:
+            choice = int(choice)
+            if 1 <= choice <= number_choices:
+                return choice
+            else:
+                raise ValueError("Choice out of valid range")
+        except ValueError:
+            log(f"Invalid choice, please choose between 1 and {number_choices}.")
+
+
+def get_user_score(prompt):
+    while True:
+        score = get_user_input(prompt)
+        if score == "":
+            return None
+        if not score.isdigit():
+            log("Invalid score format, please use an integer.")
+        return int(score)
 
     # def configure_logger(name, file_path="debug.log"):
     #     logger = logging.getLogger(name)
