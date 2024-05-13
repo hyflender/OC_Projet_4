@@ -1,7 +1,7 @@
 from utils.library import log, get_user_choice, clear_console
 
 from controllers.player_controller import PlayerController
-# from controllers.tournament_controller import TournamentController
+from controllers.tournament_controller import TournamentController
 
 from views.main_view import MainView, ShowPlateau
 
@@ -28,9 +28,9 @@ class GlobalController:
                 self.player_controller = PlayerController()
                 self.player_controller.run()
             elif choice == 2:
-                # self.tournament_controller = TournamentController()
-                # self.tournament_controller.run()
-                pass
+                self.tournament_controller = TournamentController()
+                self.tournament_controller.run()
+
             elif choice == 3:
                 pass
             elif choice == 4:

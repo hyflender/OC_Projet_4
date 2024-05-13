@@ -12,37 +12,40 @@ class TournamentController:
     def create_tournament(self):
         # Method to create tournament
 
+        # Generate unique tournament name (Tournament_XX)
         name = self.view.generate_unique_tournament_name()
+
+        # Get tournament details
         start_date, end_date, location, description, rounds = (
             self.view.get_tournament_details()
         )
-        if not rounds:
-            rounds = 4
         new_tournament = Tournament(
-            name, location, start_date, end_date, rounds, description
+            name, location, start_date, end_date, description, rounds
         )
-        new_tournament.save_tournament()
-        self.tournaments = Tournament.load_tournaments()
+        self.tournaments.append(new_tournament)
+        Tournament.save_tournaments(self.tournaments)
         log("Tournament created successfully")
+
+    def add_players_to_tournament(self):
+        self.view.view_all_tournaments(self.tournaments)
+        tournament_id = self.view.get_tournament_id()
+        tournament = self.tournaments[tournament_id]
+        print(tournament.id)
+        pass
 
     def run(self):
         clear_console()
+        self.view.view_all_tournaments(self.tournaments)
         while True:
             self.view.display_tournament_menu()
-            choice = get_user_choice(
-                "Enter the number of the option you want to select: ",
-                ["1", "2", "3", "4"],
-            )
+            choice = get_user_choice(7)
 
-            if choice == "1":
+            if choice == 1:
                 self.create_tournament()
-            elif choice == "2":
-                pass
-            elif choice == "3":
-                clear_console()
+            elif choice == 2:
+                self.add_players_to_tournament()
+            elif choice == 3:
                 self.view.view_all_tournaments(self.tournaments)
-            elif choice == "4":
+            elif choice == 6:
                 log("Exiting the tournament management menu.")
                 break
-            else:
-                log("Invalid choice. Please enter a number between 1 and 4.")

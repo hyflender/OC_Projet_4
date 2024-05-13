@@ -106,6 +106,16 @@ def get_user_score(prompt):
             log("Invalid score format, please use an integer.")
         return int(score)
 
+
+def get_valid_rounds(prompt):
+    while True:
+        rounds = get_user_input(prompt)
+        if not rounds.isdigit():
+            log("Invalid rounds format, please use an integer.")
+        if rounds == "":
+            return 4
+        return int(rounds)
+
     # def configure_logger(name, file_path="debug.log"):
     #     logger = logging.getLogger(name)
     #     if not logger.handlers:  # Pour éviter les duplications

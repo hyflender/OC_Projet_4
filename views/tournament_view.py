@@ -1,6 +1,6 @@
-from utils.library import log, get_user_input, get_valid_date
+from utils.library import log, get_user_input, get_valid_date, get_valid_rounds
 from tabulate import tabulate
-from models.Tournament import Tournament
+from models.tournament import Tournament
 
 # The menu for managing tournaments - This class is responsible for displaying the menu for managing tournaments.
 
@@ -15,11 +15,12 @@ class TournamentView:
         print("----------------------------------------")
         print("Please select an option:")
         print("1. Create a new tournament")
-        print("2. Start a tournament")
-        print("3. View all tournaments")
-        print("4. View tournament details")
-        print("5. Record Match Result")
-        print("6. Go back to main menu")
+        print("2. Add Players on a tournament")
+        print("3. Start a tournament")
+        print("4. View all tournaments")
+        print("5. View tournament details")
+        print("6. Record Match Result")
+        print("7. Go back to main menu")
         print("----------------------------------------")
 
     @staticmethod
@@ -37,7 +38,7 @@ class TournamentView:
         end_date = get_valid_date("Enter the end date (DD-MM-YYYY): ")
         location = get_user_input("Enter the location of the tournament: ")
         description = get_user_input("Enter the description of the tournament: ")
-        rounds = get_user_input("Enter the number of rounds: ")
+        rounds = get_valid_rounds("Enter the number of rounds (blank for default 4): ")
         return start_date, end_date, location, description, rounds
 
     @staticmethod
@@ -51,3 +52,13 @@ class TournamentView:
         unique_name = f"{base_name}{count}"
         log(f"Generated Tournament Name: {unique_name}")
         return unique_name
+
+    def get_tournament_id(self):
+        tournaments = Tournament.load_tournaments()
+        tournament_ids = [tournament.id for tournament in tournaments]
+        while True:
+            tournament_id = int(get_user_input("Enter the ID of the tournament: "))
+            if tournament_id in tournament_ids:
+                return tournament_id
+            else:
+                print("Tournament ID not found. Please try again.")
