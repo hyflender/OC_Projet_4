@@ -26,10 +26,8 @@ class PlayerController:
         self.players = Player.load_players()
         for player in self.players:
             if player.chess_id == chess_id:
-                first_name, last_name, birth_date, chess_id = (
-                    self.view.get_player_details()
-                )
-                player.update_player(first_name, last_name, birth_date, chess_id)
+                first_name, last_name, birth_date = self.view.get_player_details()
+                player.update_player(first_name, last_name, birth_date)
                 player.save_player()
                 log(
                     f"Player {player.first_name} {player.last_name} updated successfully."

@@ -20,11 +20,10 @@ class Player:
         self.chess_id = chess_id
         self.score = score
 
-    def update_player(self, first_name, last_name, birth_date, chess_id):
+    def update_player(self, first_name, last_name, birth_date):
         self.first_name = first_name
         self.last_name = last_name
         self.birth_date = birth_date
-        self.chess_id = chess_id
 
     def update_score(self, score):
         """Update the score of a player by adding the given score to the current score."""

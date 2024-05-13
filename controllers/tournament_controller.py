@@ -13,8 +13,14 @@ class TournamentController:
         # Method to create tournament
 
         name = self.view.generate_unique_tournament_name()
-        start_date, end_date, location, description, rounds = self.view.get_tournament_details()
-        new_tournament = Tournament(name, location, start_date, end_date, rounds, description)
+        start_date, end_date, location, description, rounds = (
+            self.view.get_tournament_details()
+        )
+        if not rounds:
+            rounds = 4
+        new_tournament = Tournament(
+            name, location, start_date, end_date, rounds, description
+        )
         new_tournament.save_tournament()
         self.tournaments = Tournament.load_tournaments()
         log("Tournament created successfully")
@@ -40,4 +46,3 @@ class TournamentController:
                 break
             else:
                 log("Invalid choice. Please enter a number between 1 and 4.")
-
