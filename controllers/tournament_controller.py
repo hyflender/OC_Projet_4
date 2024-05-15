@@ -53,7 +53,14 @@ class TournamentController:
                 self.create_tournament()
             elif choice == 2:
                 self.add_players_to_tournament()
-            elif choice == 4:
+            elif choice == 3:
+                tournament_id = self.view.get_tournament_id()
+                tournament = next(
+                    (p for p in self.tournaments if p.id == tournament_id), None
+                )
+                tournament.start_tournament()
+                Tournament.save_tournaments(self.tournaments)
+            elif choice == 5:
                 self.view.view_all_tournaments(self.tournaments)
             elif choice == 6:
                 log("Exiting the tournament management menu.")

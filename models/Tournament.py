@@ -1,7 +1,9 @@
 import json
+import random
 
 from models.player import Player
 from models.round import Round
+from models.match import Match
 
 
 # Definition of the Tournament class
@@ -26,6 +28,7 @@ class Tournament:
         self.players_list = []
         self.current_round_number = 0
         self.rounds_list = []
+        self.tournament_started = False
 
     def to_dict(self):
         return {
@@ -39,6 +42,7 @@ class Tournament:
             "players_list": self.players_list,
             "rounds_list": [round.to_dict() for round in self.rounds_list],
             "description": self.description,
+            "tournament_started": self.tournament_started,
         }
 
     @staticmethod
@@ -57,6 +61,7 @@ class Tournament:
         tournament.rounds_list = [
             Round.from_dict(round_data) for round_data in data["rounds_list"]
         ]
+        tournament.tournament_started = data.get("tournament_started", False)
         return tournament
 
     @staticmethod
@@ -106,3 +111,45 @@ class Tournament:
             print(f"An unexpected error occurred: {e}")
             return False
         return True
+
+    def start_tournament(self):
+        if self.tournament_started:
+            print("Tournament is already started.")
+            return
+        else:
+            self.tournament_started = True
+            random.shuffle(self.players_list)
+            self.start_round()
+
+    def start_round(self):
+        if self.current_round_number >= self.rounds:
+            print("Tournament is already completed.")
+            return
+
+        round_name = f"Round {self.current_round_number + 1}"
+        round_instance = Round(round_name)
+        # Get players objects from chess_id list
+        players_instance = Player.load_players()
+        players_object = [
+            next((p for p in players_instance if p.chess_id == chess_id), None)
+            for chess_id in self.players_list
+        ]
+        # Sort players by score
+        players = sorted(
+            players_object, key=lambda x: x.score if x is not None else -1, reverse=True
+        )
+        # test : affiche la liste des players
+        print([player.__dict__ for player in players])
+
+        for i in range(0, len(players) - 1, 2):
+            player1 = players[i]
+            if i + 1 < len(players):
+                player2 = players[i + 1]
+                match = Match(player1, player2)
+                print(match.to_dict())
+                round_instance.matches.append(match)
+            else:
+                print(f"Unmatched player: {player1.chess_id}")
+
+        self.rounds_list.append(round_instance)
+        self.current_round_number += 1

@@ -63,3 +63,13 @@ class Player:
                 ]
         except FileNotFoundError:
             return []
+        except json.JSONDecodeError:
+            return []
+
+    @staticmethod
+    def load_player_by_id(chess_id):
+        players = Player.load_players()
+        for player in players:
+            if player.chess_id == chess_id:
+                return player
+        return None

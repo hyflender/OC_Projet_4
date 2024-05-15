@@ -1,5 +1,5 @@
 from datetime import datetime
-from .match import Match
+from models.match import Match
 
 
 class Round:

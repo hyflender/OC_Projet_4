@@ -1,23 +1,26 @@
-from .player import Player
+from models.player import Player
 
 
 class Match:
-    def __init__(self, player1, player2, score1=0, score2=0):
-        self.player1 = player1
-        self.player2 = player2
-        self.score1 = score1
-        self.score2 = score2
+    def __init__(self, id_player1, id_player2, winner=None):
+        self.id_player1 = id_player1.chess_id
+        self.id_player2 = id_player2.chess_id
+        self.winner = winner
 
     def to_dict(self):
         return {
-            "player1": self.player1.to_dict(),
-            "player2": self.player2.to_dict(),
-            "score1": self.score1,
-            "score2": self.score2,
+            "id_player1": self.id_player1,
+            "id_player2": self.id_player2,
+            "winner": self.winner,
         }
 
     @staticmethod
     def from_dict(data):
-        player1 = Player.from_dict(data["player1"])
-        player2 = Player.from_dict(data["player2"])
-        return Match(player1, player2, data["score1"], data["score2"])
+        player1 = Player.load_player_by_id(data["id_player1"])
+        player2 = Player.load_player_by_id(data["id_player2"])
+        return Match(player1, player2, data["winner"])
+
+    def end_match(self, winner):
+        self.winner = winner
+
+
