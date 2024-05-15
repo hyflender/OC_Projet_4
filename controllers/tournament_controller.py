@@ -1,5 +1,8 @@
 from models.tournament import Tournament
+from models.player import Player
+
 from views.tournament_view import TournamentView
+from views.player_view import PlayerView
 
 from utils.library import log, get_user_choice, clear_console
 
@@ -8,6 +11,8 @@ class TournamentController:
     def __init__(self):
         self.view = TournamentView()
         self.tournaments = Tournament.load_tournaments()
+        self.player_view = PlayerView()
+        self.players = Player.load_players()
 
     def create_tournament(self):
         # Method to create tournament
@@ -29,9 +34,12 @@ class TournamentController:
     def add_players_to_tournament(self):
         self.view.view_all_tournaments(self.tournaments)
         tournament_id = self.view.get_tournament_id()
-        tournament = self.tournaments[tournament_id]
-        print(tournament.id)
-        pass
+        tournament = next((p for p in self.tournaments if p.id == tournament_id), None)
+        print(tournament.__dict__)
+        self.player_view.display_all_players(self.players)
+        chess_ids = input("Enter Chess IDs to add (comma separated): ").split(",")
+        chess_ids = [chess_id.strip() for chess_id in chess_ids]
+        print(chess_ids)
 
     def run(self):
         clear_console()
@@ -44,7 +52,7 @@ class TournamentController:
                 self.create_tournament()
             elif choice == 2:
                 self.add_players_to_tournament()
-            elif choice == 3:
+            elif choice == 4:
                 self.view.view_all_tournaments(self.tournaments)
             elif choice == 6:
                 log("Exiting the tournament management menu.")
