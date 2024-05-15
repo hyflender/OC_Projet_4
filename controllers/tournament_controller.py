@@ -60,6 +60,8 @@ class TournamentController:
                 )
                 tournament.start_tournament()
                 Tournament.save_tournaments(self.tournaments)
+
+            
             elif choice == 5:
                 self.view.view_all_tournaments(self.tournaments)
             elif choice == 6:
