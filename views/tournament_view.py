@@ -57,8 +57,14 @@ class TournamentView:
         tournaments = Tournament.load_tournaments()
         tournament_ids = [tournament.id for tournament in tournaments]
         while True:
-            tournament_id = int(get_user_input("Enter the ID of the tournament: "))
+            tournament_id = get_user_input("Enter the ID of the tournament: ")
+            try:
+                tournament_id = int(tournament_id)
+            except ValueError:
+                print("Invalid ID. Please enter an integer.")
+                continue
             if tournament_id in tournament_ids:
                 return tournament_id
             else:
                 print("Tournament ID not found. Please try again.")
+
