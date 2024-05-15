@@ -17,9 +17,9 @@ class TournamentView:
         print("1. Create a new tournament")
         print("2. Add Players on a tournament")
         print("3. Start a tournament")
-        print("4. View all tournaments")
-        print("5. View tournament details")
-        print("6. Record Match Result")
+        print("4. Record Match Result")
+        print("5. View all tournaments")
+        print("6. View tournament details")
         print("7. Go back to main menu")
         print("----------------------------------------")
 

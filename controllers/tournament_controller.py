@@ -35,11 +35,12 @@ class TournamentController:
         self.view.view_all_tournaments(self.tournaments)
         tournament_id = self.view.get_tournament_id()
         tournament = next((p for p in self.tournaments if p.id == tournament_id), None)
-        print(tournament.__dict__)
+        print(f"Tournament selected: {tournament.name}")
         self.player_view.display_all_players(self.players)
         chess_ids = input("Enter Chess IDs to add (comma separated): ").split(",")
         chess_ids = [chess_id.strip() for chess_id in chess_ids]
-        print(chess_ids)
+        tournament.add_players_to_tournament(chess_ids)
+        Tournament.save_tournaments(self.tournaments)
 
     def run(self):
         clear_console()

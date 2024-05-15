@@ -36,7 +36,7 @@ class Tournament:
             "end_date": self.end_date,
             "rounds": self.rounds,
             "current_round_number": self.current_round_number,
-            "players_list": [player.to_dict() for player in self.players_list],
+            "players_list": self.players_list,
             "rounds_list": [round.to_dict() for round in self.rounds_list],
             "description": self.description,
         }
@@ -53,9 +53,7 @@ class Tournament:
         )
         tournament.id = data.get("id", 0)
         tournament.current_round_number = data.get("current_round_number", 0)
-        tournament.players_list = [
-            Player.from_dict(player_data) for player_data in data["players_list"]
-        ]
+        tournament.players_list = data.get("players_list", [])
         tournament.rounds_list = [
             Round.from_dict(round_data) for round_data in data["rounds_list"]
         ]
@@ -96,14 +94,19 @@ class Tournament:
         except FileNotFoundError:
             return 1
 
-    # def add_player(self, player):
-    #     """Adds a player to the tournament.
-
-    #     Args:
-    #         player (Player): The player to be added to the tournament.
-    #     """
-    #     self.players.append(player)
-
+    def add_players_to_tournament(self, chess_ids):
+        players = Player.load_players()
+        try:
+            for chess_id in chess_ids:
+                player = next((p for p in players if p.chess_id == chess_id), None)
+                if player and player.chess_id not in self.players_list:
+                    self.players_list.append(player.chess_id)
+                    print(f"Player {player.chess_id} added to tournament {self.name}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return False
+        return True
+        
     # def start_next_round(self):
     #     """Starts the next round in the tournament."""
     #     self.current_round_number += 1
