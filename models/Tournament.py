@@ -6,12 +6,6 @@ from models.round import Round
 
 # Definition of the Tournament class
 class Tournament:
-    _last_id = 0  # Attribut de classe pour suivre le dernier ID utilisé
-
-    @classmethod
-    def next_id(cls):
-        cls._last_id += 1
-        return cls._last_id
 
     def __init__(
         self,
@@ -22,7 +16,7 @@ class Tournament:
         description,
         rounds=4,
     ):
-        self.id = Tournament.next_id()
+        self.id = Tournament.get_next_id()
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -47,6 +41,7 @@ class Tournament:
             "description": self.description,
         }
 
+    @staticmethod
     def from_dict(data):
         tournament = Tournament(
             data["name"],
@@ -83,12 +78,23 @@ class Tournament:
     def load_tournaments():
         try:
             with open("data/tournaments.json", "r") as file:
+                tournaments_data = json.load(file)
                 return [
-                    Tournament.from_dict(tournament_data)
-                    for tournament_data in json.load(file)
+                    Tournament.from_dict(tournament) for tournament in tournaments_data
                 ]
         except FileNotFoundError:
             return []
+
+    @staticmethod
+    def get_next_id():
+        try:
+            with open("data/tournaments.json", "r") as file:
+                tournaments = json.load(file)
+                return (
+                    max((tournament["id"] for tournament in tournaments), default=0) + 1
+                )
+        except FileNotFoundError:
+            return 1
 
     # def add_player(self, player):
     #     """Adds a player to the tournament.
