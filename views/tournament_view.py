@@ -67,4 +67,3 @@ class TournamentView:
                 return tournament_id
             else:
                 print("Tournament ID not found. Please try again.")
-

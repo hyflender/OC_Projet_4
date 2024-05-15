@@ -42,7 +42,17 @@ def get_user_input(prompt):
 
 
 def get_valid_date(prompt, edit=False):
-    """Prompt for a date and validate its format, keep asking until a valid date is entered."""
+    """
+    Prompts the user for a date input and validates its format. If the input is invalid, the user is repeatedly asked until a valid date is provided.
+    Allows for an empty input if the 'edit' flag is set, which can be used to skip changing a date during an edit operation.
+
+    Args:
+        prompt (str): The prompt message to display to the user.
+        edit (bool): If True, allows an empty string to be returned without validation. This is useful for edit operations where no change is desired.
+
+    Returns:
+        str: A valid date string in the format 'DD-MM-YYYY', or an empty string if 'edit' is True and the user inputs nothing.
+    """
     while True:
         date_input = get_user_input(prompt)
         try:
@@ -56,7 +66,17 @@ def get_valid_date(prompt, edit=False):
 
 
 def get_valid_chess_id(prompt, edit=False):
-    """Prompt for a chess ID, validate its format and check its uniqueness, keep asking until a valid ID is entered."""
+    """
+    Requests and validates a chess ID from the user. The ID must follow a specific format (two uppercase letters followed by five digits).
+    If the 'edit' flag is not set, the function also checks for the uniqueness of the ID against existing IDs in the system.
+
+    Args:
+        prompt (str): The prompt message to display to the user.
+        edit (bool): A flag to indicate whether the ID is being edited (True) or created (False). If True, uniqueness check is skipped.
+
+    Returns:
+        str: A valid chess ID that conforms to the required format and uniqueness constraints.
+    """
     while True:
         chess_id = get_user_input(prompt)
         try:
@@ -76,6 +96,11 @@ def get_valid_chess_id(prompt, edit=False):
 
 
 def clear_console():
+    """
+    Clears the console screen based on the operating system.
+
+    Uses 'cls' command for Windows and 'clear' for Unix/Linux/Mac.
+    """
     # for Windows
     if os.name == "nt":
         os.system("cls")
@@ -85,6 +110,15 @@ def clear_console():
 
 
 def get_user_choice(number_choices):
+    """
+    Prompt the user to enter a choice within a specified range and validate it.
+
+    Args:
+        number_choices (int): The maximum valid choice number.
+
+    Returns:
+        int: The validated choice entered by the user.
+    """
     while True:
         choice = get_user_input("Enter the number of the option you want to select: ")
         try:
@@ -98,6 +132,15 @@ def get_user_choice(number_choices):
 
 
 def get_user_score(prompt):
+    """
+    Prompt the user to enter a score, validate it as an integer, and return it.
+
+    Args:
+        prompt (str): The prompt message to display to the user.
+
+    Returns:
+        int or None: The score entered by the user as an integer, or None if no input is provided.
+    """
     while True:
         score = get_user_input(prompt)
         if score == "":
@@ -108,6 +151,16 @@ def get_user_score(prompt):
 
 
 def get_valid_rounds(prompt):
+    """
+    Prompt the user to enter the number of rounds for a tournament, ensuring it is a valid integer.
+    If the input is empty, defaults to 4 rounds.
+
+    Args:
+        prompt (str): The prompt message to display to the user.
+
+    Returns:
+        int: The number of rounds, defaulting to 4 if no input is provided.
+    """
     while True:
         rounds = get_user_input(prompt)
         if not rounds.isdigit():

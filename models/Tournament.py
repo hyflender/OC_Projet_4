@@ -106,13 +106,3 @@ class Tournament:
             print(f"An unexpected error occurred: {e}")
             return False
         return True
-        
-    # def start_next_round(self):
-    #     """Starts the next round in the tournament."""
-    #     self.current_round_number += 1
-    #     new_round = Round(self.current_round_number)
-    #     self.rounds.append(new_round)
-
-    # def finalize_tournament(self):
-    #     """Finalizes the tournament, concluding any necessary wrap-up actions."""
-    #     pass
