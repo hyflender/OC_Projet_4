@@ -28,7 +28,19 @@ class TournamentView:
         if not tournaments:
             log("No tournaments have been created yet.")
         else:
-            tournament_data = [tournament.__dict__ for tournament in tournaments]
+
+            tournament_data = [{
+                'ID': tournament.id,
+                'Name': tournament.name,
+                'Location': tournament.location,
+                'Start_date': tournament.start_date,
+                'End_date': tournament.end_date,
+                'Rounds': tournament.rounds,
+                'Description': tournament.description,
+                'Players': tournament.players_list,
+                'Current_round_number': tournament.current_round_number
+            } for tournament in tournaments]
+
             print(tabulate(tournament_data, headers="keys", tablefmt="rounded_outline"))
 
     @staticmethod
@@ -67,3 +79,4 @@ class TournamentView:
                 return tournament_id
             else:
                 print("Tournament ID not found. Please try again.")
+

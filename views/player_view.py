@@ -63,10 +63,14 @@ class PlayerView:
             print("No players have been created yet.")
         else:
             log("List of players:")
-            print(
-                tabulate(
-                    [player.to_dict() for player in players],
-                    headers="keys",
-                    tablefmt="rounded_outline",
-                )
-            )
+            player_data = [
+                {
+                    "First Name": player.first_name,
+                    "Last Name": player.last_name,
+                    "Birth Date": player.birth_date,
+                    "Chess ID": player.chess_id,
+                    "Score": player.score,
+                }
+                for player in players
+            ]
+            print(tabulate(player_data, headers="keys", tablefmt="rounded_outline"))

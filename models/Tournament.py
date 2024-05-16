@@ -138,18 +138,34 @@ class Tournament:
         players = sorted(
             players_object, key=lambda x: x.score if x is not None else -1, reverse=True
         )
-        # test : affiche la liste des players
-        print([player.__dict__ for player in players])
 
-        for i in range(0, len(players) - 1, 2):
-            player1 = players[i]
-            if i + 1 < len(players):
-                player2 = players[i + 1]
-                match = Match(player1, player2)
-                print(match.to_dict())
-                round_instance.matches.append(match)
+        # Function to check if two players have already played against each other
+        played_pairs = set(
+            frozenset((match.id_player1, match.id_player2))
+            for round in self.rounds_list
+            for match in round.matches
+        )
+
+        matched_players = set()
+        for i in range(len(players)):
+            if players[i] in matched_players:
+                continue
+            for j in range(i + 1, len(players)):
+                if players[j] in matched_players:
+                    continue
+                if (
+                    frozenset((players[i].chess_id, players[j].chess_id))
+                    not in played_pairs
+                ):
+                    match = Match(players[i], players[j])
+                    print(match.to_dict())
+                    round_instance.matches.append(match)
+                    matched_players.update([players[i], players[j]])
+                    break
             else:
-                print(f"Unmatched player: {player1.chess_id}")
+                # If no match is found for player[i], they remain unmatched
+                print(f"Unmatched player: {players[i].chess_id}")
 
+        print("New round started.")
         self.rounds_list.append(round_instance)
         self.current_round_number += 1

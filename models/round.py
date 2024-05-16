@@ -9,8 +9,17 @@ class Round:
         self.end_time = None
         self.matches = []
 
+    def are_all_matches_completed(self):
+        return all(match.winner is not None for match in self.matches)
+
     def end_round(self):
-        self.end_time = datetime.now().isoformat()
+        if self.are_all_matches_completed():
+            self.end_time = datetime.now().isoformat()
+            print("Round ended successfully.")
+            return True
+        else:
+            print("Not all matches are completed yet.")
+            return False
 
     def to_dict(self):
         return {
