@@ -3,7 +3,7 @@ from typing import Optional
 from models import Player
 from views import PlayerView
 
-from utils.library import (
+from utils import (
     log,
     get_user_input,
     clear_console,
