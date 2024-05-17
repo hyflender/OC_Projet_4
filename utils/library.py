@@ -46,15 +46,19 @@ def get_user_input(prompt: str) -> str:
 
 def get_valid_date(prompt: str, edit: bool = False) -> str:
     """
-    Prompts the user for a date input and validates its format. If the input is invalid, the user is repeatedly asked until a valid date is provided.
-    Allows for an empty input if the 'edit' flag is set, which can be used to skip changing a date during an edit operation.
+    Prompts the user for a date input and validates its format. If the input is invalid,
+    the user is repeatedly asked until a valid date is provided. Allows for an empty input
+    if the 'edit' flag is set, which can be used to skip changing a date during an edit
+    operation.
 
     Args:
         prompt (str): The prompt message to display to the user.
-        edit (bool): If True, allows an empty string to be returned without validation. This is useful for edit operations where no change is desired.
+        edit (bool): If True, allows an empty string to be returned without validation.
+        This is useful for edit operations where no change is desired.
 
     Returns:
-        str: A valid date string in the format 'DD-MM-YYYY', or an empty string if 'edit' is True and the user inputs nothing.
+        str: A valid date string in the format 'DD-MM-YYYY', or an empty string if 'edit'
+        is True and the user inputs nothing.
     """
     while True:
         date_input = get_user_input(prompt)
@@ -70,15 +74,15 @@ def get_valid_date(prompt: str, edit: bool = False) -> str:
 
 def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
     """
-    Requests and validates a chess ID from the user. The ID must follow a specific format (two uppercase letters followed by five digits).
-    If the 'edit' flag is not set, the function also checks for the uniqueness of the ID against existing IDs in the system.
+    Validates a chess ID from the user, ensuring it follows the format: two uppercase letters followed by five digits.
+    If 'edit' is False, it also checks for the ID's uniqueness in the system.
 
     Args:
-        prompt (str): The prompt message to display to the user.
-        edit (bool): A flag to indicate whether the ID is being edited (True) or created (False). If True, uniqueness check is skipped.
+        prompt (str): The message to display for user input.
+        edit (bool): Indicates if the ID is being edited (True) or created (False). Skips uniqueness check if True.
 
     Returns:
-        str: A valid chess ID that conforms to the required format and uniqueness constraints.
+        str: A valid chess ID meeting format and uniqueness requirements.
     """
     while True:
         chess_id = get_user_input(prompt)
