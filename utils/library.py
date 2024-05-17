@@ -10,12 +10,49 @@ LOG_DIR = LOG_FILE.parent
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
-logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.INFO,
-    format="%(asctime)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+# Création d'un logger
+logger = logging.getLogger("chess_management")
+logger.setLevel(logging.DEBUG)  # Configurer le niveau global du logger
+
+# Création d'un gestionnaire de fichier pour enregistrer les logs dans un fichier
+file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
+file_handler.setLevel(logging.DEBUG)
+
+# Création d'un gestionnaire de flux pour afficher les logs sur la console
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+
+# Définition du format des logs
+formatter = logging.Formatter(
+    "%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )
+file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
+
+# Ajouter les gestionnaires au logger
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+
+def colorize_message(message: str, color_code: str) -> str:
+    return f"\033[{color_code}m{message}\033[0m"
+
+
+class Log:
+    @staticmethod
+    def info(message: str) -> None:
+        logger.info(message)
+
+    @staticmethod
+    def warn(message: str) -> None:
+        colored_message = colorize_message(message, "33")  # Yellow
+        print(colored_message)
+
+    @staticmethod
+    def critical(message: str) -> None:
+        colored_message = colorize_message(message, "31")  # Red
+        print(colored_message)
+        logger.critical(message)
 
 
 def log(message: str) -> None:
