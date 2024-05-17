@@ -5,3 +5,10 @@ from .main_view import MainView
 from .player_view import PlayerView
 from .matchs_view import MatchsView
 from .tournament_view import TournamentView
+
+__all__ = [
+    "MainView",
+    "PlayerView",
+    "MatchsView",
+    "TournamentView",
+]
