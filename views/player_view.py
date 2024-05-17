@@ -29,7 +29,7 @@ class PlayerView:
         last_name = get_user_input("Enter the player's last name: ")
         birth_date = get_valid_date("Enter the player's birth date: ")
         chess_id = get_valid_chess_id(
-            "Enter the player's chess ID: ", must_be_unique=True
+            "Enter the player's chess ID: ", edit=False
         )
         return first_name, last_name, birth_date, chess_id
 
