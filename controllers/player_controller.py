@@ -1,5 +1,7 @@
-from models.player import Player
-from views.player_view import PlayerView
+from typing import Optional
+
+from models import Player
+from views import PlayerView
 
 from utils.library import (
     log,
@@ -13,12 +15,21 @@ from utils.library import (
 
 
 class PlayerController:
-    def __init__(self):
+    """
+    Controller for managing player-related operations.
+    """
+
+    def __init__(self) -> None:
+        """
+        Initializes the PlayerController instance.
+        """
         self.view = PlayerView()
         self.players = Player.load_players()
 
-    def create_player(self):
-        # Method to create a new player
+    def create_player(self) -> None:
+        """
+        Creates a new player and saves it to the list of players.
+        """
         first_name, last_name, birth_date, chess_id = self.view.get_player_details()
         new_player = Player(first_name, last_name, birth_date, chess_id)
         self.players.append(new_player)
@@ -27,48 +38,92 @@ class PlayerController:
             f"Player {new_player.first_name} {new_player.last_name} created successfully."
         )
 
-    def update_player(self):
-        # Method to update informations of a player
+    def update_player(self) -> None:
+        """
+        Updates the information of an existing player.
+        """
         self.view.display_all_players(self.players)
-        chess_id = get_valid_chess_id("Chess ID of the player to update: ", edit=True)
-        player = next((p for p in self.players if p.chess_id == chess_id), None)
+        player = None
+        while not player:
+            chess_id = get_valid_chess_id("Chess ID of the player to update: ", edit=True)
+            player = self._find_player_by_chess_id(chess_id)
+            if not player:
+                log("Player not found with the given chess ID. Please try again.")
         if player:
             log(
                 f"Player {player.first_name} {player.last_name} ({player.chess_id}) selected."
             )
-            first_name = get_user_input(
-                "New First Name (leave blank to keep current): "
-            )
-            last_name = get_user_input("New Last Name (leave blank to keep current): ")
-            birth_date = get_valid_date(
-                "New Birth Date (leave blank to keep current): ", edit=True
-            )
-            player.update_player(first_name, last_name, birth_date)
-            Player.save_players(self.players)
-            log("Player updated successfully.")
+            self._update_player_details(player)
         else:
             log("Player not found with the given chess ID.")
 
-    def update_score_player(self):
-        # Method to update the score of a player
+    def update_score_player(self) -> None:
+        """
+        Updates the score of an existing player.
+        """
 
         self.view.display_all_players(self.players)
-        chess_id = get_valid_chess_id(
-            "Chess ID of the player's score to update: ", edit=True
+        player = None
+        while not player:
+            chess_id = get_valid_chess_id(
+                "Chess ID of the player's score to update: ", edit=True
+            )
+            player = self._find_player_by_chess_id(chess_id)
+            if not player:
+                log("Player not found with the given chess ID. Please try again.")
+        if player:
+            log(
+                f"Player {player.first_name} {player.last_name} ({player.chess_id}) selected."
+            )
+            self._update_player_score(player)
+        else:
+            log("Player not found with the given chess ID.")
+
+    def _find_player_by_chess_id(self, chess_id: str) -> Optional[Player]:
+        """
+        Finds a player by its chess ID.
+
+        Args:
+            chess_id (str): The chess ID of the player to find.
+
+        Returns:
+            Optional[Player]: The player with the given chess ID, or None if not found.
+        """
+        return next((p for p in self.players if p.chess_id == chess_id), None)
+
+    def _update_player_details(self, player: Player) -> None:
+        """
+        Updates the details of a player.
+
+        Args:
+            player (Player): The player to update.
+        """
+        first_name = get_user_input("New First Name (leave blank to keep current): ")
+        last_name = get_user_input("New Last Name (leave blank to keep current): ")
+        birth_date = get_valid_date(
+            "New Birth Date (leave blank to keep current): ", edit=True
         )
-        player = next((p for p in self.players if p.chess_id == chess_id), None)
-        if player:
-            log(
-                f"Player {player.first_name} {player.last_name} ({player.chess_id}) selected."
-            )
-            new_score = get_user_score("New Score (leave blank to keep current): ")
-            player.update_score(new_score)
-            Player.save_players(self.players)
-            log("Player's score updated successfully.")
-        else:
-            log("Player not found with the given chess ID.")
 
-    def run(self):
+        player.update_player(first_name, last_name, birth_date)
+        Player.save_players(self.players)
+        log("Player updated successfully.")
+
+    def _update_player_score(self, player: Player) -> None:
+        """
+        Updates the score of a player.
+
+        Args:
+            player (Player): The player to update.
+        """
+        new_score = get_user_score("New Score (leave blank to keep current): ")
+        player.update_score(new_score)
+        Player.save_players(self.players)
+        log("Player's score updated successfully.")
+
+    def run(self) -> None:
+        """
+        Run the players management menu.
+        """
         clear_console()
         while True:
             # Display list of players
