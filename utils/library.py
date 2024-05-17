@@ -3,7 +3,6 @@ import logging
 import os
 import re
 import json
-from typing import Optional
 from config import LOG_FILE
 
 LOG_DIR = LOG_FILE.parent
@@ -138,25 +137,6 @@ def get_user_choice(number_choices: int) -> int:
                 )
         except ValueError:
             log(f"Invalid choice, please choose between 1 and {number_choices}.")
-
-
-def get_user_score(prompt: str) -> Optional[int]:
-    """
-    Prompt the user to enter a score, validate it as an integer, and return it.
-
-    Args:
-        prompt (str): The prompt message to display to the user.
-
-    Returns:
-        int or None: The score entered by the user as an integer, or None if no input is provided.
-    """
-    while True:
-        score = get_user_input(prompt)
-        if score == "":
-            return None
-        if score.isdigit():
-            return int(score)
-        log("Invalid score format, please use an integer.")
 
 
 def get_valid_rounds(prompt: str) -> int:
