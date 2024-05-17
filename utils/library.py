@@ -3,9 +3,23 @@ import logging
 import os
 import re
 import json
+from typing import Optional
+from config import LOG_FILE
+
+LOG_DIR = LOG_FILE.parent
+
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
 
-def log(message):
+def log(message: str) -> None:
     """
     Displays a message to the standard output and logs the message using the logging module.
 
@@ -14,21 +28,10 @@ def log(message):
     """
 
     print(message)
-
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
-    logging.basicConfig(
-        filename="logs/chest_management.log",
-        level=logging.INFO,
-        format="%(asctime)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
     logging.info(message)
 
-    return message
 
-
-def get_user_input(prompt):
+def get_user_input(prompt: str) -> str:
     """
     Prompts the user for input and returns the input as a string.
 
@@ -41,7 +44,7 @@ def get_user_input(prompt):
     return input(prompt)
 
 
-def get_valid_date(prompt, edit=False):
+def get_valid_date(prompt: str, edit: bool = False) -> str:
     """
     Prompts the user for a date input and validates its format. If the input is invalid, the user is repeatedly asked until a valid date is provided.
     Allows for an empty input if the 'edit' flag is set, which can be used to skip changing a date during an edit operation.
@@ -65,7 +68,7 @@ def get_valid_date(prompt, edit=False):
             log("Invalid date format, please use DD-MM-YYYY.")
 
 
-def get_valid_chess_id(prompt, edit=False):
+def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
     """
     Requests and validates a chess ID from the user. The ID must follow a specific format (two uppercase letters followed by five digits).
     If the 'edit' flag is not set, the function also checks for the uniqueness of the ID against existing IDs in the system.
@@ -95,7 +98,7 @@ def get_valid_chess_id(prompt, edit=False):
             log(str(e))
 
 
-def clear_console():
+def clear_console() -> None:
     """
     Clears the console screen based on the operating system.
 
@@ -109,7 +112,7 @@ def clear_console():
         os.system("clear")
 
 
-def get_user_choice(number_choices):
+def get_user_choice(number_choices: int) -> int:
     """
     Prompt the user to enter a choice within a specified range and validate it.
 
@@ -126,12 +129,14 @@ def get_user_choice(number_choices):
             if 1 <= choice <= number_choices:
                 return choice
             else:
-                raise ValueError("Choice out of valid range")
+                log(
+                    f"Choice out of valid range, please choose between 1 and {number_choices}."
+                )
         except ValueError:
             log(f"Invalid choice, please choose between 1 and {number_choices}.")
 
 
-def get_user_score(prompt):
+def get_user_score(prompt: str) -> Optional[int]:
     """
     Prompt the user to enter a score, validate it as an integer, and return it.
 
@@ -145,12 +150,12 @@ def get_user_score(prompt):
         score = get_user_input(prompt)
         if score == "":
             return None
-        if not score.isdigit():
-            log("Invalid score format, please use an integer.")
-        return int(score)
+        if score.isdigit():
+            return int(score)
+        log("Invalid score format, please use an integer.")
 
 
-def get_valid_rounds(prompt):
+def get_valid_rounds(prompt: str) -> int:
     """
     Prompt the user to enter the number of rounds for a tournament, ensuring it is a valid integer.
     If the input is empty, defaults to 4 rounds.
@@ -163,30 +168,8 @@ def get_valid_rounds(prompt):
     """
     while True:
         rounds = get_user_input(prompt)
-        if not rounds.isdigit():
-            log("Invalid rounds format, please use an integer.")
+        if rounds.isdigit():
+            return int(rounds)
         if rounds == "":
             return 4
-        return int(rounds)
-
-    # def configure_logger(name, file_path="debug.log"):
-    #     logger = logging.getLogger(name)
-    #     if not logger.handlers:  # Pour éviter les duplications
-    #         logger.setLevel(logging.INFO)
-
-    #         # Gestionnaire de fichier
-    #         file_handler = logging.FileHandler(file_path, encoding="utf-8")
-    #         formatter = logging.Formatter(
-    #             "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    #         )
-    #         file_handler.setFormatter(formatter)
-
-    #         # Gestionnaire de flux
-    #         stream_handler = logging.StreamHandler()
-    #         stream_handler.setFormatter(formatter)
-
-    #         # Ajouter les gestionnaires au logger
-    #         logger.addHandler(file_handler)
-    #         logger.addHandler(stream_handler)
-
-    #     return logger
+        log("Invalid rounds format, please use an integer.")
