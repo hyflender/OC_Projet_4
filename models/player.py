@@ -1,8 +1,6 @@
 import json
-from pathlib import Path
-from typing import List, Optional, Dict, Any
-
-DATA_PATH = Path("data/players.json")
+from typing import List, Optional, Dict
+from config import PLAYERS_FILE
 
 
 class Player:
@@ -43,7 +41,7 @@ class Player:
         if score is not None:
             self.score = score
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, str]:
         """
         Serializes the player instance to a dictionary.
 
@@ -59,7 +57,7 @@ class Player:
         }
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> "Player":
+    def from_dict(data: Dict[str, str]) -> "Player":
         """
         Deserializes a dictionary to a Player instance.
 
@@ -81,7 +79,7 @@ class Player:
         Saves a list of players to a JSON file.
         """
         try:
-            with DATA_PATH.open("w", encoding="utf-8") as file:
+            with PLAYERS_FILE.open("w", encoding="utf-8") as file:
                 json.dump(
                     [player.to_dict() for player in players],
                     file,
@@ -100,7 +98,7 @@ class Player:
             A list of Player instances.
         """
         try:
-            with DATA_PATH.open("r", encoding="utf-8") as file:
+            with PLAYERS_FILE.open("r", encoding="utf-8") as file:
                 return [
                     Player.from_dict(player_data) for player_data in json.load(file)
                 ]
