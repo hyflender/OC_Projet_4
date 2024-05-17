@@ -9,7 +9,6 @@ from utils import (
     clear_console,
     get_valid_chess_id,
     get_valid_date,
-    get_user_score,
     get_user_choice,
 )
 
@@ -115,7 +114,7 @@ class PlayerController:
         Args:
             player (Player): The player to update.
         """
-        new_score = get_user_score("New Score (leave blank to keep current): ")
+        new_score = self.view.get_new_user_score("New Score (leave blank to keep current): ")
         player.update_score(new_score)
         Player.save_players(self.players)
         log("Player's score updated successfully.")
