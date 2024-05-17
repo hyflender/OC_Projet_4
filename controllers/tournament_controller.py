@@ -119,7 +119,7 @@ class TournamentController:
                             continue
                         if rounds.end_round():
                             tournament.start_round()
-                            print("New round started.")
+                            
 
                     else:
                         print("No match found with that ID.")
