@@ -1,7 +1,7 @@
 from models import Tournament, Player
 from views import TournamentView, PlayerView
 
-from utils.library import log, get_user_choice, clear_console, get_user_input
+from utils import Logger, log, get_user_choice, clear_console, get_user_input
 
 
 class TournamentController:
@@ -26,7 +26,7 @@ class TournamentController:
         )
         self.tournaments.append(new_tournament)
         Tournament.save_tournaments(self.tournaments)
-        log("Tournament created successfully")
+        Logger.info("Tournament created successfully")
 
     def add_players_to_tournament(self):
         self.view.view_all_tournaments(self.tournaments)
