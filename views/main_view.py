@@ -1,4 +1,4 @@
-from utils import Log
+from utils import Logger
 
 
 class MainView:
@@ -11,7 +11,7 @@ class MainView:
         Displays the main menu options to the user.
         """
 
-        Log.debug("Show the display_global_menu method")
+        Logger.info("Show the display_global_menu method")
 
         print("Welcome to Chess Club Manager - Main Menu")
         print("----------------------------------------")
