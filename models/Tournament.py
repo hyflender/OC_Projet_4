@@ -1,23 +1,27 @@
 import json
 import random
+from typing import List, Dict, Any
 
-from models.player import Player
-from models.round import Round
-from models.match import Match
+from models import Player, Round, Match
+from config import TOURNAMENTS_FILE
+
+from utils import Log
 
 
-# Definition of the Tournament class
 class Tournament:
+    """
+    Represents a chess tournament.
+    """
 
     def __init__(
         self,
-        name,
-        location,
-        start_date,
-        end_date,
-        description,
-        rounds=4,
-    ):
+        name: str,
+        location: str,
+        start_date: str,
+        end_date: str,
+        description: str,
+        rounds: int = 4,
+    ) -> None:
         self.id = Tournament.get_next_id()
         self.name = name
         self.location = location
@@ -25,12 +29,18 @@ class Tournament:
         self.end_date = end_date
         self.rounds = rounds
         self.description = description
-        self.players_list = []
-        self.current_round_number = 0
-        self.rounds_list = []
-        self.tournament_started = False
+        self.players_list: List[str] = []
+        self.current_round_number: int = 0
+        self.rounds_list: List[Round] = []
+        self.tournament_started: bool = False
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Serializes the tournament instance to a dictionary.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing the tournament's attributes.
+        """
         return {
             "id": self.id,
             "name": self.name,
@@ -46,7 +56,16 @@ class Tournament:
         }
 
     @staticmethod
-    def from_dict(data):
+    def from_dict(data: Dict[str, Any]) -> "Tournament":
+        """
+        Deserializes a dictionary to a Tournament instance.
+
+        Args:
+            data (Dict[str, Any]): A dictionary containing the tournament's attributes.
+
+        Returns:
+            Tournament: A Tournament instance with the attributes from the dictionary.
+        """
         tournament = Tournament(
             data["name"],
             data["location"],
@@ -65,9 +84,15 @@ class Tournament:
         return tournament
 
     @staticmethod
-    def save_tournaments(tournaments):
+    def save_tournaments(tournaments: List["Tournament"]) -> None:
+        """
+        Saves a list of tournaments to a JSON file.
+
+        Args:
+            tournaments (List[Tournament]): A list of Tournament instances.
+        """
         try:
-            with open("data/tournaments.json", "w") as file:
+            with TOURNAMENTS_FILE.open("w", encoding="utf-8") as file:
                 json.dump(
                     [tournament.to_dict() for tournament in tournaments],
                     file,
@@ -78,9 +103,15 @@ class Tournament:
             print(f"An unexpected error occurred: {e}")
 
     @staticmethod
-    def load_tournaments():
+    def load_tournaments() -> List["Tournament"]:
+        """
+        Loads a list of tournaments from a JSON file.
+
+        Returns:
+            List[Tournament]: A list of Tournament instances.
+        """
         try:
-            with open("data/tournaments.json", "r") as file:
+            with TOURNAMENTS_FILE.open("r", encoding="utf-8") as file:
                 tournaments_data = json.load(file)
                 return [
                     Tournament.from_dict(tournament) for tournament in tournaments_data
@@ -89,9 +120,15 @@ class Tournament:
             return []
 
     @staticmethod
-    def get_next_id():
+    def get_next_id() -> int:
+        """
+        Generates the next ID for a tournament.
+
+        Returns:
+            int: The next ID for a tournament.
+        """
         try:
-            with open("data/tournaments.json", "r") as file:
+            with TOURNAMENTS_FILE.open("r", encoding="utf-8") as file:
                 tournaments = json.load(file)
                 return (
                     max((tournament["id"] for tournament in tournaments), default=0) + 1
@@ -99,7 +136,16 @@ class Tournament:
         except FileNotFoundError:
             return 1
 
-    def add_players_to_tournament(self, chess_ids):
+    def add_players_to_tournament(self, chess_ids: List[str]) -> bool:
+        """
+        Adds players to the tournament.
+
+        Args:
+            chess_ids (List[str]): A list of chess IDs.
+
+        Returns:
+            bool: True if the players were added successfully, False otherwise.
+        """
         players = Player.load_players()
         try:
             for chess_id in chess_ids:
@@ -112,16 +158,22 @@ class Tournament:
             return False
         return True
 
-    def start_tournament(self):
+    def start_tournament(self) -> None:
+        """
+        Starts the tournament.
+        """
         if self.tournament_started:
-            print("Tournament is already started.")
+            Log.warn("Tournament is already started.")
             return
         else:
             self.tournament_started = True
             random.shuffle(self.players_list)
             self.start_round()
 
-    def start_round(self):
+    def start_round(self) -> None:
+        """
+        Starts a new round of the tournament.
+        """
         if self.current_round_number >= self.rounds:
             print("Tournament is already completed.")
             return
