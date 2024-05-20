@@ -10,28 +10,25 @@ LOG_DIR = LOG_FILE.parent
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
-# Création d'un logger
+# Creating a logger
 logger = logging.getLogger("chess_management")
-logger.setLevel(logging.DEBUG)  # Configurer le niveau global du logger
+logger.setLevel(logging.DEBUG)  # Set the global logger level
+logger.handlers = []
 
-# Création d'un gestionnaire de fichier pour enregistrer les logs dans un fichier
-file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
+# Creating a file handler for logging
+launch_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+unique_log_file = LOG_DIR / f"app_{launch_time}.log"
+file_handler = logging.FileHandler(unique_log_file, encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
-# Création d'un gestionnaire de flux pour afficher les logs sur la console
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-
-# Définition du format des logs
+# Defining the log format
 formatter = logging.Formatter(
     "%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )
 file_handler.setFormatter(formatter)
-console_handler.setFormatter(formatter)
 
-# Ajouter les gestionnaires au logger
+# Adding the handlers to the logger
 logger.addHandler(file_handler)
-logger.addHandler(console_handler)
 
 
 def colorize_message(message: str, color_code: str) -> str:
@@ -40,13 +37,19 @@ def colorize_message(message: str, color_code: str) -> str:
 
 class Log:
     @staticmethod
+    def debug(message: str) -> None:
+        logger.debug(message)
+
+    @staticmethod
     def info(message: str) -> None:
+        print(message)
         logger.info(message)
 
     @staticmethod
     def warn(message: str) -> None:
         colored_message = colorize_message(message, "33")  # Yellow
         print(colored_message)
+        logger.warning(message)
 
     @staticmethod
     def critical(message: str) -> None:
@@ -105,7 +108,7 @@ def get_valid_date(prompt: str, edit: bool = False) -> str:
             datetime.datetime.strptime(date_input, "%d-%m-%Y")
             return date_input
         except ValueError:
-            log("Invalid date format, please use DD-MM-YYYY.")
+            Log.warn("Invalid date format, please use DD-MM-YYYY.")
 
 
 def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
