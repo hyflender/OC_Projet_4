@@ -1,11 +1,12 @@
-from controllers.main_controller import GlobalController
+from controllers import GlobalController
+from utils import Log
 
 
 def main():
-    # Initialize the global controller
+    Log.debug("Initialize the global controller")
     controller = GlobalController()
 
-    # Run the application
+    Log.debug("Run the application")
     controller.run()
 
 
