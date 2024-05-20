@@ -11,7 +11,7 @@ class MainView:
         Displays the main menu options to the user.
         """
 
-        Logger.info("Show the display_global_menu method")
+        Logger.info("Show the display_global_menu(self) method")
 
         print("Welcome to Chess Club Manager - Main Menu")
         print("----------------------------------------")
