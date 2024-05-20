@@ -71,17 +71,6 @@ class Logger:
         logger.critical(message)
 
 
-def log(message: str) -> None:
-    """
-    Displays a message to the standard output and logs the message using the logging module.
-
-    Args:
-        message (str): The message to be displayed.
-    """
-
-    print(message)
-
-
 def get_user_input(prompt: str) -> str:
     """
     Prompts the user for input and returns the input as a string.
@@ -120,7 +109,7 @@ def get_valid_date(prompt: str, edit: bool = False) -> str:
             datetime.datetime.strptime(date_input, "%d-%m-%Y")
             return date_input
         except ValueError:
-            Log.warn("Invalid date format, please use DD-MM-YYYY.")
+            print("Invalid date format, please use DD-MM-YYYY.")
 
 
 def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
@@ -150,7 +139,7 @@ def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
                         raise ValueError("ID already exists")
             return chess_id
         except ValueError as e:
-            log(str(e))
+            print(str(e))
 
 
 def clear_console() -> None:
@@ -184,11 +173,11 @@ def get_user_choice(number_choices: int) -> int:
             if 1 <= choice <= number_choices:
                 return choice
             else:
-                log(
+                print(
                     f"Choice out of valid range, please choose between 1 and {number_choices}."
                 )
         except ValueError:
-            log(f"Invalid choice, please choose between 1 and {number_choices}.")
+            print(f"Invalid choice, please choose between 1 and {number_choices}.")
 
 
 def get_valid_rounds(prompt: str) -> int:
@@ -208,4 +197,4 @@ def get_valid_rounds(prompt: str) -> int:
             return int(rounds)
         if rounds == "":
             return 4
-        log("Invalid rounds format, please use an integer.")
+        print("Invalid rounds format, please use an integer.")
