@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 from models import Player, Round, Match
 from config import TOURNAMENTS_FILE
 
-from utils import Log
+from utils import Logger
 
 
 class Tournament:
@@ -163,7 +163,7 @@ class Tournament:
         Starts the tournament.
         """
         if self.tournament_started:
-            Log.warn("Tournament is already started.")
+            Logger.warn("Tournament is already started.")
             return
         else:
             self.tournament_started = True
