@@ -2,7 +2,7 @@
 
 
 from .library import (
-    Log,
+    Logger,
     log,
     get_user_input,
     clear_console,
@@ -13,7 +13,7 @@ from .library import (
 )
 
 __all__ = [
-    "Log",
+    "Logger",
     "log",
     "get_user_input",
     "clear_console",
