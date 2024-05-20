@@ -32,13 +32,14 @@ class TournamentView:
             tournament_data = [{
                 'ID': tournament.id,
                 'Name': tournament.name,
+                'Is Started': "Yes" if tournament.tournament_started else "No",
                 'Location': tournament.location,
                 'Start_date': tournament.start_date,
                 'End_date': tournament.end_date,
                 'Rounds': tournament.rounds,
                 'Description': tournament.description,
                 'Players': tournament.players_list,
-                'Current_round_number': tournament.current_round_number
+                'Current_round_number': f"{tournament.current_round_number}/{tournament.rounds}"
             } for tournament in tournaments]
 
             print(tabulate(tournament_data, headers="keys", tablefmt="rounded_outline"))
