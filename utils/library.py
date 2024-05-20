@@ -11,50 +11,63 @@ if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
 # Creating a logger
-logger = logging.getLogger("chess_management")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Set the global logger level
-logger.handlers = []
+
 
 # Creating a file handler for logging
 launch_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 unique_log_file = LOG_DIR / f"app_{launch_time}.log"
+
 file_handler = logging.FileHandler(unique_log_file, encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
+
+
+# Creating a console handler for logging to the console critical
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.CRITICAL)
 
 # Defining the log format
 formatter = logging.Formatter(
     "%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )
 file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
 
 # Adding the handlers to the logger
 logger.addHandler(file_handler)
+logger.addHandler(console_handler)
 
 
-def colorize_message(message: str, color_code: str) -> str:
-    return f"\033[{color_code}m{message}\033[0m"
-
-
-class Log:
-    @staticmethod
-    def debug(message: str) -> None:
-        logger.debug(message)
-
+class Logger:
     @staticmethod
     def info(message: str) -> None:
-        print(message)
+        """
+        Logs an info message.
+
+        Args:
+            message (str): The info message to log.
+        """
         logger.info(message)
 
     @staticmethod
     def warn(message: str) -> None:
-        colored_message = colorize_message(message, "33")  # Yellow
-        print(colored_message)
+        """
+        Logs a warning message.
+
+        Args:
+            message (str): The warning message to log.
+        """
         logger.warning(message)
 
     @staticmethod
     def critical(message: str) -> None:
-        colored_message = colorize_message(message, "31")  # Red
-        print(colored_message)
+        """
+        Logs a critical message.
+
+        Args:
+            message (str): The critical message to log.
+        """
         logger.critical(message)
 
 
@@ -67,7 +80,6 @@ def log(message: str) -> None:
     """
 
     print(message)
-    logging.info(message)
 
 
 def get_user_input(prompt: str) -> str:
