@@ -1,12 +1,18 @@
-# The Main Menu View - This is the first view that the user sees when they run the program.
+from utils import Log
 
 
 class MainView:
+    """
+    The Main Menu View - This is the first view that the user sees when they run the program.
+    """
 
-    def display_global_menu(self):
+    def display_global_menu(self) -> None:
         """
         Displays the main menu options to the user.
         """
+
+        Log.debug("Show the display_global_menu method")
+
         print("Welcome to Chess Club Manager - Main Menu")
         print("----------------------------------------")
         print("Please select an option:")
@@ -18,20 +24,26 @@ class MainView:
 
 
 class ShowPlateau:
-    def __init__(self):
+    """
+    Class for displaying the chessboard in the console.
+    """
+
+    def __init__(self) -> list:
         self.plateau = self.initialiser_plateau()
 
     def initialiser_plateau(self):
-        # Initialiser le plateau avec des cases vides
+        """
+        Initializes the chessboard with pieces in their starting positions.
+        """
         plateau = [["   " for _ in range(8)] for _ in range(8)]
 
-        # Symboles Unicode pour les pièces
+        # Unicode symbols for the pieces
         pieces_noires = ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"]
         pieces_blanches = ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"]
         pion_noir = "♟"
         pion_blanc = "♙"
 
-        # Placer les pièces sur le plateau
+        # Place the pieces on the board
         plateau[0] = pieces_noires
         plateau[1] = [pion_noir for _ in range(8)]
         plateau[6] = [pion_blanc for _ in range(8)]
@@ -39,7 +51,10 @@ class ShowPlateau:
 
         return plateau
 
-    def afficher_plateau(self):
+    def afficher_plateau(self) -> None:
+        """
+        Displays the chessboard in the console.
+        """
         print("    a   b   c   d   e   f   g   h")
         print(" +----------------------------------+")
         for i in range(8):
