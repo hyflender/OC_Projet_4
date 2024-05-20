@@ -1,4 +1,4 @@
-from utils.library import log, get_user_input, get_valid_date, get_valid_rounds
+from utils import log, get_user_input, get_valid_date, get_valid_rounds
 from tabulate import tabulate
 from models.tournament import Tournament
 

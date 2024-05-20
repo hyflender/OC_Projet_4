@@ -1,8 +1,5 @@
-from models.tournament import Tournament
-from models.player import Player
-
-from views.tournament_view import TournamentView
-from views.player_view import PlayerView
+from models import Tournament, Player
+from views import TournamentView, PlayerView
 
 from utils.library import log, get_user_choice, clear_console, get_user_input
 
@@ -119,7 +116,6 @@ class TournamentController:
                             continue
                         if rounds.end_round():
                             tournament.start_round()
-                            
 
                     else:
                         print("No match found with that ID.")

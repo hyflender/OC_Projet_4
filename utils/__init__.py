@@ -9,6 +9,7 @@ from .library import (
     get_valid_chess_id,
     get_valid_date,
     get_user_choice,
+    get_valid_rounds,
 )
 
 __all__ = [
@@ -19,4 +20,5 @@ __all__ = [
     "get_valid_chess_id",
     "get_valid_date",
     "get_user_choice",
+    "get_valid_rounds",
 ]
