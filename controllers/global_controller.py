@@ -2,6 +2,7 @@ from utils import Logger, get_user_choice, clear_console
 
 from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
+from controllers.rapports_controller import RapportsController
 
 from views.main_view import MainView, ShowPlateau
 
@@ -31,6 +32,11 @@ class GlobalController:
                 Logger.info("Running the tournament controller")
                 tournament_controller = TournamentController()
                 tournament_controller.run()
+
+            elif choice == 3:
+                Logger.info("Running the rapports controller")
+                rapports_controller = RapportsController()
+                rapports_controller.run()
 
             elif choice == 4:
                 print("Exiting the program. See you soon !")
