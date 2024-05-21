@@ -23,19 +23,14 @@ class GlobalController:
             choice = get_user_choice(4)
 
             if choice == 1:
-                try:
-                    Logger.info("Running the player controller")
-                    player_controller = PlayerController()
-                    player_controller.run()
-                except ValueError as e:
-                    Logger.critical(f"Critical error : {e}")
+                Logger.info("Running the player controller")
+                player_controller = PlayerController()
+                player_controller.run()
+
             elif choice == 2:
-                try:
-                    Logger.info("Running the tournament controller")
-                    tournament_controller = TournamentController()
-                    tournament_controller.run()
-                except ValueError as e:
-                    Logger.critical(f"Critical error : {e}")
+                Logger.info("Running the tournament controller")
+                tournament_controller = TournamentController()
+                tournament_controller.run()
 
             elif choice == 4:
                 print("Exiting the program. See you soon !")

@@ -6,7 +6,6 @@ from utils import (
     get_user_input,
     get_valid_date,
     get_valid_chess_id,
-    log,
 )
 
 
@@ -76,7 +75,7 @@ class PlayerView:
                 return None
             if score.isdigit():
                 return int(score)
-            log("Invalid score format, please use an integer.")
+            print("Invalid score format, please use an integer.")
 
     @staticmethod
     def display_all_players(players: List[Dict]) -> None:
@@ -89,7 +88,7 @@ class PlayerView:
         if not players:
             print("No players have been created yet.")
         else:
-            log("List of players:")
+            print("List of players:")
             player_data = [
                 {
                     "First Name": player.first_name,

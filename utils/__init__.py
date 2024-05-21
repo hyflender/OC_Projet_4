@@ -3,7 +3,6 @@
 
 from .library import (
     Logger,
-    log,
     get_user_input,
     clear_console,
     get_valid_chess_id,
@@ -14,7 +13,6 @@ from .library import (
 
 __all__ = [
     "Logger",
-    "log",
     "get_user_input",
     "clear_console",
     "get_valid_chess_id",

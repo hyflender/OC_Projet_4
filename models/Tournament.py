@@ -5,8 +5,6 @@ from typing import List, Dict, Any
 from models import Player, Round, Match
 from config import TOURNAMENTS_FILE
 
-from utils import Logger
-
 
 class Tournament:
     """
@@ -30,9 +28,10 @@ class Tournament:
         self.rounds = rounds
         self.description = description
         self.players_list: List[str] = []
-        self.current_round_number: int = 0
         self.rounds_list: List[Round] = []
-        self.tournament_started: bool = False
+        self.current_round_number: int = len(self.rounds_list)
+        self.is_started: bool = False
+        self.is_finished: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         """
@@ -52,7 +51,8 @@ class Tournament:
             "players_list": self.players_list,
             "rounds_list": [round.to_dict() for round in self.rounds_list],
             "description": self.description,
-            "tournament_started": self.tournament_started,
+            "is_started": self.is_started,
+            "is_finished": self.is_finished,
         }
 
     @staticmethod
@@ -80,7 +80,8 @@ class Tournament:
         tournament.rounds_list = [
             Round.from_dict(round_data) for round_data in data["rounds_list"]
         ]
-        tournament.tournament_started = data.get("tournament_started", False)
+        tournament.is_started = data.get("is_started", False)
+        tournament.is_finished = data.get("is_finished", False)
         return tournament
 
     @staticmethod
@@ -162,11 +163,14 @@ class Tournament:
         """
         Starts the tournament.
         """
-        if self.tournament_started:
-            Logger.warn("Tournament is already started.")
+        if self.is_started:
+            print("Tournament is already started.")
+            return
+        elif len(self.players_list) < 2:
+            print("Tournament needs at least 2 players.")
             return
         else:
-            self.tournament_started = True
+            self.is_started = True
             random.shuffle(self.players_list)
             self.start_round()
 
@@ -175,6 +179,7 @@ class Tournament:
         Starts a new round of the tournament.
         """
         if self.current_round_number >= self.rounds:
+            self.is_finished = True
             print("Tournament is already completed.")
             return
 
@@ -191,32 +196,39 @@ class Tournament:
             players_object, key=lambda x: x.score if x is not None else -1, reverse=True
         )
 
-        # Function to check if two players have already played against each other
-        played_pairs = set(
-            frozenset((match.id_player1, match.id_player2))
-            for round in self.rounds_list
-            for match in round.matches
-        )
-
         matched_players = set()
+        unmatched_players = []
+
+        # First pass: try to match players who haven't played against each other
         for i in range(len(players)):
             if players[i] in matched_players:
                 continue
             for j in range(i + 1, len(players)):
                 if players[j] in matched_players:
                     continue
-                if (
-                    frozenset((players[i].chess_id, players[j].chess_id))
-                    not in played_pairs
-                ):
-                    match = Match(players[i], players[j])
+                match = Match(players[i], players[j])
+                round_instance.matches.append(match)
+                matched_players.update([players[i], players[j]])
+                break
+            else:
+                # Collect unmatched players for second pass
+                unmatched_players.append(players[i])
+
+        # Second pass: match remaining unmatched players
+        if unmatched_players:
+            for i in range(len(unmatched_players)):
+                if unmatched_players[i] in matched_players:
+                    continue
+                for j in range(i + 1, len(unmatched_players)):
+                    if unmatched_players[j] in matched_players:
+                        continue
+                    match = Match(unmatched_players[i], unmatched_players[j])
                     print(match.to_dict())
                     round_instance.matches.append(match)
-                    matched_players.update([players[i], players[j]])
+                    matched_players.update([unmatched_players[i], unmatched_players[j]])
                     break
-            else:
-                # If no match is found for player[i], they remain unmatched
-                print(f"Unmatched player: {players[i].chess_id}")
+                else:
+                    print(f"Unmatched player: {unmatched_players[i].chess_id}")
 
         print("New round started.")
         self.rounds_list.append(round_instance)

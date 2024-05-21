@@ -44,7 +44,8 @@ class Match:
         if self.equal:
             player_winner.score += 0.5
             player_looser.score += 0.5
+            self.winner = "Draw"
         else:
             player_winner.score += 1
-
+        
         Player.save_players(players)
