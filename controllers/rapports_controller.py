@@ -1,5 +1,4 @@
 from views import RapportsView
-from models import Player
 
 from utils import clear_console, get_user_choice
 
@@ -16,7 +15,7 @@ class RapportsController:
 
             if choice == 1:
                 # Liste de tous les joueurs par ordre alphabétique
-                pass
+                self.view.generate_players_report()
             elif choice == 2:
                 # Liste de tous les tournois
                 pass
