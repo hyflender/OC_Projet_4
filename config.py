@@ -8,8 +8,13 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "data" / "reports" / "template"
 TEMPLATE_DIR.mkdir(exist_ok=True)
 
+# Reports
 REPORT_DIR = BASE_DIR / "data" / "reports"
 REPORT_DIR.mkdir(exist_ok=True)
+
+# Flake8_Report
+FLAKE8_REPORT_DIR = BASE_DIR / "flake8_report"
+FLAKE8_REPORT_DIR.mkdir(exist_ok=True)
 
 # DATA Files
 
