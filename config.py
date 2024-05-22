@@ -33,3 +33,4 @@ if not TOURNAMENTS_FILE.exists():
 # Other Config
 
 LOG_FILE = BASE_DIR / "logs" / "app.log"
+LOG_FILE.mkdir(exist_ok=True)
