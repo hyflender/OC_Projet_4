@@ -1,4 +1,4 @@
-from controllers import GlobalController
+from controllers.global_controller import GlobalController
 from utils import Logger
 
 
