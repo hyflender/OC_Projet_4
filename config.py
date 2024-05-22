@@ -9,6 +9,10 @@ TEMPLATE_DIR = BASE_DIR / "views" / "templates"
 TEMPLATE_DIR.mkdir(exist_ok=True)
 
 # Reports
+# Check if the 'data' directory exists, if not, create it
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
 REPORT_DIR = BASE_DIR / "data" / "reports"
 REPORT_DIR.mkdir(exist_ok=True)
 
@@ -16,10 +20,6 @@ REPORT_DIR.mkdir(exist_ok=True)
 FLAKE8_REPORT_DIR = BASE_DIR / "flake8_report"
 FLAKE8_REPORT_DIR.mkdir(exist_ok=True)
 
-# DATA Files
-
-DATA_DIR = BASE_DIR / "data"
-DATA_DIR.mkdir(exist_ok=True)
 
 PLAYERS_FILE = DATA_DIR / "players.json"
 if not PLAYERS_FILE.exists():
