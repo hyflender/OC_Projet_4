@@ -30,7 +30,6 @@ if not TOURNAMENTS_FILE.exists():
     TOURNAMENTS_FILE.touch()
 
 
-# Other Config
-
-LOG_FILE = BASE_DIR / "logs" / "app.log"
-LOG_FILE.mkdir(exist_ok=True)
+# Logs directory and file
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)

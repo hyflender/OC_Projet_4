@@ -3,9 +3,8 @@ import logging
 import os
 import re
 import json
-from config import LOG_FILE
+from config import LOG_DIR
 
-LOG_DIR = LOG_FILE.parent
 
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
