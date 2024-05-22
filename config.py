@@ -23,11 +23,11 @@ FLAKE8_REPORT_DIR.mkdir(exist_ok=True)
 
 PLAYERS_FILE = DATA_DIR / "players.json"
 if not PLAYERS_FILE.exists():
-    PLAYERS_FILE.touch()
+    PLAYERS_FILE.write_text('[]')
 
 TOURNAMENTS_FILE = DATA_DIR / "tournaments.json"
 if not TOURNAMENTS_FILE.exists():
-    TOURNAMENTS_FILE.touch()
+    TOURNAMENTS_FILE.write_text('[]')
 
 
 # Logs directory and file
