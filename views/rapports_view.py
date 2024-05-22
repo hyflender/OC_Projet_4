@@ -1,9 +1,10 @@
-# The menu for create rapports - This class is responsible for displaying the menu for creating rapports.
-from config import TEMPLATE_DIR, REPORT_DIR
+import subprocess
+from tabulate import tabulate
+from config import BASE_DIR, TEMPLATE_DIR, REPORT_DIR, FLAKE8_REPORT_DIR
 from jinja2 import Environment, FileSystemLoader
 import webbrowser
 
-from models import Player
+from models import Player, Tournament
 
 
 class RapportsView:
@@ -20,6 +21,10 @@ class RapportsView:
         print("1. Create a rapport players (List all players in alphabetical order)")
         print("2. Create a rapport tournament (List all tournaments)")
         print("3. Create a rapport match (List all matches)")
+        print(
+            "4. Create a rapport list players on tournament (List all players present on a tournament)"
+        )
+        print("6. Generate a Flake8 report")
         print("7. Go back to main menu")
         print("----------------------------------------")
 
@@ -50,3 +55,91 @@ class RapportsView:
 
         # Open the generated HTML report file in the default web browser
         webbrowser.open(str(report_path))
+
+    def generate_tournaments_report(self):
+        """
+        Generates an HTML report of all tournaments.
+        """
+        tournaments = Tournament.load_tournaments()
+        tournaments_dict = [tournament.to_dict() for tournament in tournaments]
+        template = self.env.get_template("tournaments_report_template.html")
+        html_content = template.render(tournaments=tournaments_dict)
+
+        # Save the rendered HTML to a file
+        with open(REPORT_DIR / "tournaments_report.html", "w") as f:
+            f.write(html_content)
+        print("Tournaments report generated successfully.")
+
+        # Print tournaments information in the terminal
+        print("\nTournament List:")
+        for tournament in tournaments:
+            print(
+                f"{tournament.id} {tournament.name} - {tournament.start_date} / {tournament.end_date}"
+            )
+
+        report_path = REPORT_DIR / "tournaments_report.html"
+        print("----------------------------------------")
+        print(f"Tournaments report saved to: {report_path}")
+        print("----------------------------------------")
+
+        # Open the generated HTML report file in the default web browser
+        webbrowser.open(str(report_path))
+
+    def generate_list_players_on_tournament(self):
+        """
+        Generates an HTML report of all players present on a tournament.
+        """
+        tournaments = Tournament.load_tournaments()
+        tournaments_dict = [tournament.to_dict() for tournament in tournaments]
+
+        for tournament in tournaments:
+            player_list = []
+            for player_id in tournament.players_list:
+                player = Player.load_player_by_id(player_id)
+                if player not in player_list:
+                    player_list.append(player.to_dict())
+            for tournament_dict in tournaments_dict:
+                if tournament_dict["id"] == tournament.id:
+                    tournament_dict["players"] = player_list
+
+        template = self.env.get_template("list_players_on_tournament.html")
+        html_content = template.render(tournaments=tournaments_dict)
+
+        # Save the rendered HTML to a file
+        with open(REPORT_DIR / "list_players_on_tournament.html", "w") as f:
+            f.write(html_content)
+        print("List players on tournament report generated successfully.")
+
+        # Print tournaments information in the terminal
+        print("\nList players on tournament:\n")
+        for tournament in tournaments:
+            print(
+                f"{tournament.id} {tournament.name} - {tournament.start_date} / {tournament.end_date}"
+            )
+            data = [["First Name", "Last Name", "Chess ID", "Score"]]
+            for player_id in tournament.players_list:
+                player = Player.load_player_by_id(player_id)
+                data.append(
+                    [player.first_name, player.last_name, player.chess_id, player.score]
+                )
+            print(tabulate(data, headers="firstrow", tablefmt="rounded_outline"))
+            print("\n")
+
+        report_path = REPORT_DIR / "list_players_on_tournament.html"
+        print("----------------------------------------")
+        print(f"List players on tournament report saved to: {report_path}")
+        print("----------------------------------------")
+
+        # Open the generated HTML report file in the default web browser
+        webbrowser.open(str(report_path))
+
+    def generate_flake8_report(self):
+        """Generates an HTML Flake8 report for the project."""
+        try:
+            subprocess.run(
+                ["flake8", "--format=html", "--htmldir=" + str(FLAKE8_REPORT_DIR), str(BASE_DIR)],
+                check=True,
+            )
+            print(f"Flake8 report generated in {FLAKE8_REPORT_DIR}")
+        except subprocess.CalledProcessError as e:
+            print("Error generating the Flake8 report:", e)
