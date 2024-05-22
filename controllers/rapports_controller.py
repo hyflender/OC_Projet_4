@@ -33,4 +33,5 @@ class RapportsController:
                 self.view.generate_flake8_report()
             elif choice == 7:
                 print("Exiting the rapports menu.")
+                clear_console()
                 break
