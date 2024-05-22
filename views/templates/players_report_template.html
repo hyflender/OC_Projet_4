@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Players Report</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #5D5C61;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .header-image {
+            width: 100%;
+            height: 300px;
+            background: url('template/image.png') no-repeat center center;
+            background-size: contain;
+            border-radius: 8px 8px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-image"></div>
+        <h1>Players List</h1>
+        <table id="playersTable">
+            <thead>
+                <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Chess ID</th>
+                    <th>Score</th>
+                    <th>Birth Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                <tr>
+                    <td>{{ player.last_name }}</td>
+                    <td>{{ player.first_name }}</td>
+                    <td>{{ player.chess_id }}</td>
+                    <td>{{ player.score }}</td>
+                    <td>{{ player.birth_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
+
+<script>
+    // Script for ordering DataTable
+    $(document).ready(function () {
+        $('#playersTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "order": [[0, "asc"]],
+            "info": true,
+            "searching": true,
+            "pageLength": 20,
+            "lengthChange": false,
+            "filter": true
+        });
+    });
+</script>

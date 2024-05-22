@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 # Jinja2 template and rapport files
-TEMPLATE_DIR = BASE_DIR / "data" / "reports" / "template"
+TEMPLATE_DIR = BASE_DIR / "views" / "templates"
 TEMPLATE_DIR.mkdir(exist_ok=True)
 
 # Reports

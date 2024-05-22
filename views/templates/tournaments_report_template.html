@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tournaments Report</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #5D5C61;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .header-image {
+            width: 100%;
+            height: 300px;
+            background: url('template/image.png') no-repeat center center;
+            background-size: contain;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .details-table {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f9f9f9;
+        }
+
+        .details-table th,
+        .details-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .details-table th {
+            background-color: #efefef;
+        }
+
+        .details-row {
+            background-color: #f9f9f9;
+        }
+
+        .details-control i {
+            cursor: pointer;
+        }
+
+        .details-container {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+        }
+
+        .details-container h4 {
+            margin: 0;
+            padding: 5px;
+            background-color: #efefef;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-image"></div>
+        <h1>Tournaments List</h1>
+        <table id="tournamentsTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tournament in tournaments %}
+                <tr data-tournament='{{ tournament | tojson | safe }}'>
+                    <td class="details-control" style="text-align: center;"><i class="fa-solid fa-plus"></i></td>
+                    <td>{{ tournament.id }}</td>
+                    <td>{{ tournament.name }}</td>
+                    <td>{{ tournament.description }}</td>
+                    <td>{{ tournament.location }}</td>
+                    <td>{{ tournament.start_date }}</td>
+                    <td>{{ tournament.end_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#tournamentsTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "order": [[1, "asc"]],
+                "info": true,
+                "searching": true,
+                "pageLength": 20,
+                "lengthChange": false,
+                "filter": true
+            });
+
+            $('#tournamentsTable tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                var icon = $(this).find('i');
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    icon.removeClass('fa-minus').addClass('fa-plus');
+                } else {
+                    var data = JSON.parse(tr.attr('data-tournament'));
+                    row.child(formatDetails(data)).show();
+                    tr.addClass('shown');
+                    icon.removeClass('fa-plus').addClass('fa-minus');
+                }
+            });
+
+            function formatDetails(data) {
+                var details = '<div class="details-container">';
+                if (Array.isArray(data.rounds_list)) {
+                    data.rounds_list.forEach(function (round) {
+                        details += `<h4>${round.name}</h4>`;
+                        details += `<table class="details-table">`;
+                        details += `<thead><tr><th>Match</th><th>Player 1</th><th>Player 2</th><th>Result</th></tr></thead>`;
+                        details += `<tbody>`;
+                        round.matches.forEach(function (match) {
+                            var matchResult = match.winner ? `${match.winner} wins` : "Match not started";
+                            details += `<tr>`;
+                            details += `<td>Match ${match.id}</td>`;
+                            details += `<td>${match.id_player1}</td>`;
+                            details += `<td>${match.id_player2}</td>`;
+                            details += `<td>${matchResult}</td>`;
+                            details += `</tr>`;
+                        });
+                        details += `</tbody></table>`;
+                    });
+                } else {
+                    details += "<div>No rounds data available.</div>";
+                }
+                details += '</div>';
+                return details;
+            }
+        });
+    </script>
+</body>
+
+</html>
