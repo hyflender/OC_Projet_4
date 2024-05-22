@@ -4,6 +4,7 @@ from models import Player
 from views import PlayerView
 
 from utils import (
+    Logger,
     get_user_input,
     clear_console,
     get_valid_chess_id,
@@ -128,7 +129,7 @@ class PlayerController:
         """
         clear_console()
         while True:
-            # Display list of players
+            Logger.info("Displaying list of players")
             self.view.display_all_players(self.players)
             # Display the player menu
             self.view.display_player_menu()
@@ -138,7 +139,7 @@ class PlayerController:
             if choice == 1:
                 self.create_player()
             elif choice == 2:
-                self.update_player()
+                self.view.select_player()
             elif choice == 3:
                 self.update_score_player()
             elif choice == 4:
