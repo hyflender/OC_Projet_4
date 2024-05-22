@@ -20,10 +20,11 @@ class RapportsView:
         print("Please select an option:")
         print("1. Create a rapport players (List all players in alphabetical order)")
         print("2. Create a rapport tournament (List all tournaments)")
-        print("3. Create a rapport match (List all matches)")
+        print("3. Create a nom et date d'un tournoi")
         print(
             "4. Create a rapport list players on tournament (List all players present on a tournament)"
         )
+        print("5. Create a rapport match on tournament (List all matches of a tournament)")
         print("6. Generate a Flake8 report")
         print("7. Go back to main menu")
         print("----------------------------------------")
@@ -137,9 +138,20 @@ class RapportsView:
         """Generates an HTML Flake8 report for the project."""
         try:
             subprocess.run(
-                ["flake8", "--format=html", "--htmldir=" + str(FLAKE8_REPORT_DIR), str(BASE_DIR)],
+                [
+                    "flake8",
+                    "--format=html",
+                    "--htmldir=" + str(FLAKE8_REPORT_DIR),
+                    str(BASE_DIR),
+                ],
                 check=True,
             )
-            print(f"Flake8 report generated in {FLAKE8_REPORT_DIR}")
+            print("----------------------------------------")
+            print(f"Flake8 report saved to: {FLAKE8_REPORT_DIR}")
+            print("----------------------------------------")
+
+            # Open the generated HTML report file in the default web browser
+            webbrowser.open(str(FLAKE8_REPORT_DIR) + "/index.html")
+
         except subprocess.CalledProcessError as e:
             print("Error generating the Flake8 report:", e)
