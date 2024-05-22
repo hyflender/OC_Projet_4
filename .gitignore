@@ -1,5 +1,6 @@
 *.db
-/data/
+/data/*
+!/data/template/
 /temp/
 /GUI/
 /flake8_report/
