@@ -26,8 +26,8 @@ class RapportsController:
                 # List of tournament players in alphabetical order
                 self.view.generate_list_players_on_tournament()
             elif choice == 5:
-                # Liste de tous les tours du tournoi et de tous les matchs du tour
-                pass
+                # List of all the matches of a tournament
+                self.view.generate_tournaments_report()
             elif choice == 6:
                 # Rapport flake8-html dans un répertoire "flake8_rapport"
                 self.view.generate_flake8_report()
