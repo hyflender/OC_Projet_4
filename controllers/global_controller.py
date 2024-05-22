@@ -1,45 +1,50 @@
 from utils import Logger, get_user_choice, clear_console
 
-from controllers.player_controller import PlayerController
-from controllers.tournament_controller import TournamentController
-from controllers.rapports_controller import RapportsController
+from controllers import PlayerController, TournamentController, RapportsController
 
-from views.main_view import MainView, ShowPlateau
+from views import MainView, ShowPlateau
 
 
 class GlobalController:
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes the GlobalController class, clear the console, setting up the main view and the plateau.
         """
-        clear_console()
-        self.view = MainView()
-        self.show_plateau = ShowPlateau().afficher_plateau()
+        self.view: MainView = MainView()
 
-    def run(self):
+    def run(self) -> None:
         while True:
-            # Display the global menu
+            Logger.info("Clearing the console")
+            clear_console()
+
+            Logger.info("Showing the plateau")
+            self.show_plateau: ShowPlateau = ShowPlateau().afficher_plateau()
+
+            Logger.info("Showing the global menu")
             self.view.display_global_menu()
-            # Get the user choice
-            choice = get_user_choice(4)
+
+            Logger.info("Getting the user choice")
+            choice: int = get_user_choice(4)
 
             if choice == 1:
                 Logger.info("Running the player controller")
-                player_controller = PlayerController()
+                player_controller: PlayerController = PlayerController()
                 player_controller.run()
 
             elif choice == 2:
                 Logger.info("Running the tournament controller")
-                tournament_controller = TournamentController()
+                tournament_controller: TournamentController = TournamentController()
                 tournament_controller.run()
 
             elif choice == 3:
                 Logger.info("Running the rapports controller")
-                rapports_controller = RapportsController()
+                rapports_controller: RapportsController = RapportsController()
                 rapports_controller.run()
 
             elif choice == 4:
+                Logger.info("Exiting the program")
                 print("Exiting the program. See you soon !")
                 break
             else:
-                break
+                Logger.critical("Invalid choice")
+                print("Invalid choice, please try again.")
