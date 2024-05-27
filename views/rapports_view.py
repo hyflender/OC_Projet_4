@@ -33,7 +33,7 @@ class RapportsView:
         """
         Generates an HTML report of all players sorted alphabetically by first name.
         """
-        players = sorted(Player.load_players(), key=lambda x: x.last_name)
+        players = Player.load_players_sorted()
         template = self.env.get_template("players_report_template.html")
         html_content = template.render(players=players)
 
