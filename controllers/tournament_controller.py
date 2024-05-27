@@ -9,7 +9,7 @@ class TournamentController:
         self.view = TournamentView()
         self.tournaments = Tournament.load_tournaments()
         self.player_view = PlayerView()
-        self.players = Player.load_players()
+        self.players = Player.load_all_players()
 
     def create_tournament(self):
         # Method to create tournament
