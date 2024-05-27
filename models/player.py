@@ -25,7 +25,7 @@ class Player:
         birth_date: Optional[str] = None,
     ) -> None:
         """
-        Updates the player's information.
+        Updates the player's information and saves the updated data to the JSON file.
         """
         if first_name:
             self.first_name = first_name.capitalize()
@@ -34,12 +34,27 @@ class Player:
         if birth_date:
             self.birth_date = birth_date
 
+        players = Player.load_all_players()
+        for p in players:
+            if p.chess_id == self.chess_id:
+                p.first_name = self.first_name
+                p.last_name = self.last_name
+                p.birth_date = self.birth_date
+                break
+
+        Player.save_all_players(players)
+
     def update_score(self, score: Optional[int] = None) -> None:
         """
-        Updates the player's score.
+        Updates the player's score and saves the updated data to the JSON file.
         """
         if score is not None:
-            self.score = score
+            self.score = float(score)
+            players = Player.load_all_players()
+            for p in players:
+                if p.chess_id == self.chess_id:
+                    p.score = self.score
+            Player.save_all_players(players)
 
     def to_dict(self) -> Dict[str, str]:
         """
@@ -74,7 +89,7 @@ class Player:
         return player
 
     @staticmethod
-    def save_players(players: List["Player"]) -> None:
+    def save_all_players(players: List["Player"]) -> None:
         """
         Saves a list of players to a JSON file.
         """
@@ -90,7 +105,7 @@ class Player:
             print(f"An error occurred while saving the players: {e}")
 
     @staticmethod
-    def load_players() -> List["Player"]:
+    def load_all_players() -> List["Player"]:
         """
         Loads a list of players from a JSON file.
 
@@ -110,15 +125,20 @@ class Player:
             return []
 
     @staticmethod
-    def load_player_by_id(chess_id: str) -> Optional["Player"]:
+    def _load_player_by_chess_id(chess_id: str) -> Optional["Player"]:
         """
         Loads a player by their chess ID.
 
         Returns:
             A Player instance if found, None otherwise.
         """
-        players = Player.load_players()
+        players = Player.load_all_players()
         for player in players:
             if player.chess_id == chess_id:
                 return player
         return None
+
+    @staticmethod
+    def load_players_sorted():
+        players = Player.load_all_players()
+        return sorted(players, key=lambda x: x.last_name)

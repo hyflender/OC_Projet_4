@@ -1,11 +1,14 @@
 import re
+import time
 from typing import List, Dict, Optional
 from tabulate import tabulate
+from models import Player
 
 from utils import (
     get_user_input,
     get_valid_date,
     get_valid_chess_id,
+    clear_console,
 )
 
 
@@ -24,23 +27,41 @@ class PlayerView:
         print("----------------------------------------")
         print("Please select an option:")
         print("1. Create a new player")
-        print("2. Update a player")
-        print("3. Update a player's score")
-        print("4. View all players")
-        print("5. Go back to main menu")
+        print("2. Manage a player")
+        print("3. View all players")
+        print("4. Go back to main menu")
+
+    def display_sub_player_menu(self, player: Player) -> None:
+        """
+        Displays the sub menu for managing a player.
+        """
+        print("\n Sub menu to manage a player")
+        print("----------------------------------------")
+        print("Please select an option:")
+        print(f"1. Edit {player.first_name} {player.last_name} details")
+        print(
+            f"2. Edit {player.first_name} {player.last_name} score (actual score: {player.score})"
+        )
+        print("3. Go back to the main menu")
 
     @staticmethod
-    def get_player_details() -> tuple:
+    def get_new_player_informations() -> tuple[str, str, str, str]:
         """
         Prompts the user to enter the details of a player.
 
         Returns:
             tuple: A tuple containing the first name, last name, birth date, and chess ID of the player.
         """
-        first_name = get_user_input("Enter the player's first name: ")
-        last_name = get_user_input("Enter the player's last name: ")
-        birth_date = get_valid_date("Enter the player's birth date: ")
-        chess_id = get_valid_chess_id("Enter the player's chess ID: ", edit=False)
+        first_name = get_user_input(
+            "Enter the player's first name: ", allow_empty=False
+        )
+        last_name = get_user_input("Enter the player's last name: ", allow_empty=False)
+        birth_date = get_valid_date(
+            "Enter the player's birth date: ", allow_empty=False
+        )
+        chess_id = get_valid_chess_id(
+            "Enter the player's chess ID: ", check_uniqueness=True
+        )
         return first_name, last_name, birth_date, chess_id
 
     @staticmethod
@@ -100,3 +121,37 @@ class PlayerView:
                 for player in players
             ]
             print(tabulate(player_data, headers="keys", tablefmt="rounded_outline"))
+
+    def display_player_informations(self, player: Player) -> None:
+        """
+        Display the details of a player.
+        """
+        if not player:
+            print("No player found.")
+        else:
+            player_data = [
+                {
+                    "First Name": player.first_name,
+                    "Last Name": player.last_name,
+                    "Birth Date": player.birth_date,
+                    "Chess ID": player.chess_id,
+                    "Score": player.score,
+                }
+            ]
+        return print(tabulate(player_data, headers="keys", tablefmt="rounded_outline"))
+
+    def display_informations_message(self, message: str) -> None:
+        """
+        Display return message to the user.
+        """
+
+        if message:
+            print("----------------------------------------")
+            print(f"{message} | Wait 3 seconds...")
+            print("----------------------------------------")
+            time.sleep(3)
+            clear_console()
+            self.message = None
+
+        else:
+            pass
