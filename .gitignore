@@ -2,6 +2,8 @@
 /data/
 /temp/
 /GUI/
+/env/
+/flake8_report/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
