@@ -70,75 +70,82 @@ class Logger:
         logger.critical(message)
 
 
-def get_user_input(prompt: str) -> str:
+def get_user_input(prompt: str, allow_empty: bool = True) -> str:
     """
     Prompts the user for input and returns the input as a string.
 
     Args:
         prompt (str): The prompt message to display to the user.
+        allow_empty (bool): If True, allows an empty string to be returned without validation.
+        This is useful for edit operations where no change is desired.
 
     Returns:
         str: The user's input.
     """
-    return input(prompt)
+    while True:
+        user_input = input(prompt).strip()
+        if allow_empty or user_input:
+            return user_input
+        print("Input cannot be empty. Please try again.")
 
 
-def get_valid_date(prompt: str, edit: bool = False) -> str:
+def get_valid_date(prompt: str, allow_empty: bool = False) -> str:
     """
     Prompts the user for a date input and validates its format. If the input is invalid,
     the user is repeatedly asked until a valid date is provided. Allows for an empty input
-    if the 'edit' flag is set, which can be used to skip changing a date during an edit
+    if the 'allow_empty' flag is set, which can be used to skip changing a date during an edit
     operation.
 
     Args:
         prompt (str): The prompt message to display to the user.
-        edit (bool): If True, allows an empty string to be returned without validation.
+        allow_empty (bool): If True, allows an empty string to be returned without validation.
         This is useful for edit operations where no change is desired.
 
     Returns:
-        str: A valid date string in the format 'DD-MM-YYYY', or an empty string if 'edit'
+        str: A valid date string in the format 'DD-MM-YYYY', or an empty string if 'allow_empty'
         is True and the user inputs nothing.
     """
     while True:
-        date_input = get_user_input(prompt)
+        date_input = get_user_input(prompt, allow_empty=allow_empty)
+        if allow_empty and date_input == "":
+            return date_input
         try:
-            # if the user wants to edit and the date is empty, return the date
-            if edit and date_input == "":
-                return date_input
             datetime.datetime.strptime(date_input, "%d-%m-%Y")
             return date_input
         except ValueError:
             print("Invalid date format, please use DD-MM-YYYY.")
 
 
-def get_valid_chess_id(prompt: str, edit: bool = False) -> str:
+def get_valid_chess_id(prompt: str, check_uniqueness: bool = False) -> str:
     """
     Validates a chess ID from the user, ensuring it follows the format: two uppercase letters followed by five digits.
-    If 'edit' is False, it also checks for the ID's uniqueness in the system.
+    If 'check_uniqueness' is True, it also checks for the ID's uniqueness in the system.
 
     Args:
         prompt (str): The message to display for user input.
-        edit (bool): Indicates if the ID is being edited (True) or created (False). Skips uniqueness check if True.
+        check_uniqueness (bool): Indicates if the ID's uniqueness should be checked (True) or not (False).
 
     Returns:
         str: A valid chess ID meeting format and uniqueness requirements.
     """
     while True:
         chess_id = get_user_input(prompt)
-        try:
-            if not re.match(r"^[A-Z]{2}\d{5}$", chess_id):
-                raise ValueError(
-                    "Invalid format, please use 2 uppercase letters followed by 5 digits."
-                )
-            if not edit:
+        if not re.match(r"^[A-Z]{2}\d{5}$", chess_id):
+            print("Invalid format, please use 2 uppercase letters followed by 5 digits.")
+            continue
+
+        if check_uniqueness:
+            try:
                 with open("data/players.json", "r") as file:
                     players = json.load(file)
-                for player in players:
-                    if player["chess_id"] == chess_id:
-                        raise ValueError("ID already exists")
-            return chess_id
-        except ValueError as e:
-            print(str(e))
+                if any(player["chess_id"] == chess_id for player in players):
+                    print("ID already exists")
+                    continue
+            except (FileNotFoundError, json.JSONDecodeError) as e:
+                print(f"Error checking uniqueness: {e}")
+                continue
+
+        return chess_id
 
 
 def clear_console() -> None:
