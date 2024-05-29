@@ -1,6 +1,6 @@
 import re
 import time
-from typing import List, Dict, Optional
+from typing import List, Optional
 from tabulate import tabulate
 from models import Player
 
@@ -99,7 +99,7 @@ class PlayerView:
             print("Invalid score format, please use an integer.")
 
     @staticmethod
-    def display_all_players(players: List[Dict]) -> None:
+    def display_all_players(players: List[Player]) -> None:
         """
         Display the details of all players.
 
@@ -126,6 +126,7 @@ class PlayerView:
         """
         Display the details of a player.
         """
+        player_data = []
         if not player:
             print("No player found.")
         else:

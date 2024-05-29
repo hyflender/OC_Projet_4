@@ -21,7 +21,7 @@ class PlayerController:
         """
         self.view = PlayerView()
         self.players = Player.load_all_players()
-        self.message = None
+        self.message = ""
 
     def create_player(self) -> None:
         """

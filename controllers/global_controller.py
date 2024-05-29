@@ -18,7 +18,7 @@ class GlobalController:
             clear_console()
 
             Logger.info("Showing the plateau")
-            self.show_plateau: ShowPlateau = ShowPlateau().afficher_plateau()
+            ShowPlateau().afficher_plateau()
 
             Logger.info("Showing the global menu")
             self.view.display_global_menu()

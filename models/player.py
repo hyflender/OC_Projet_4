@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 from config import PLAYERS_FILE
 
 
@@ -56,7 +56,7 @@ class Player:
                     p.score = self.score
             Player.save_all_players(players)
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> Dict[str, Union[str, int, float]]:
         """
         Serializes the player instance to a dictionary.
 
