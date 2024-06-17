@@ -69,6 +69,11 @@ python main.py
 
 Follow the on-screen prompts to manage tournaments. You can add players, start tournaments, and record match results through the command line interface.
 
+To generate Flake8 report:
+```bash
+flake8 --format=html --htmldir=flake8_report
+```
+
 ## Contributing
 
 Contributions to the Chess Tournament Manager are welcome! Here's how you can contribute:
