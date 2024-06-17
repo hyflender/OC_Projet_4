@@ -19,16 +19,12 @@ class RapportsView:
         print("----------------------------------------")
         print("Please select an option:")
         print("1. Create a rapport players (List all players in alphabetical order)")
-        print("2. Create a rapport tournament (List all tournaments)")
-        print("3. Create a nom et date d'un tournoi")
+        print("2. Create a rapport tournament (List all tournaments details)")
         print(
-            "4. Create a rapport list players on tournament (List all players present on a tournament)"
+            "3. Create a rapport list players on tournament (List all players present on a tournament)"
         )
-        print(
-            "5. Create a rapport match on tournament (List all matches of a tournament)"
-        )
-        print("6. Generate a Flake8 report")
-        print("7. Go back to main menu")
+        print("4. Generate a Flake8 report")
+        print("5. Go back to main menu")
         print("----------------------------------------")
 
     def generate_players_report(self):
