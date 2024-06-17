@@ -1,6 +1,6 @@
 import json
 import random
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from models import Player, Round, Match
 from config import TOURNAMENTS_FILE
@@ -121,6 +121,27 @@ class Tournament:
             return []
 
     @staticmethod
+    def _load_tournament_by_id(tournament_id: int) -> Optional["Tournament"]:
+        """
+        Loads a tournament by its ID.
+
+        Args:
+            tournament_id (int): The ID of the tournament to load.
+
+        Returns:
+            Optional[Tournament]: The tournament with the given ID, or None if not found.
+        """
+        tournaments = Tournament.load_tournaments()
+        return next(
+            (
+                tournament
+                for tournament in tournaments
+                if tournament.id == tournament_id
+            ),
+            None,
+        )
+
+    @staticmethod
     def get_next_id() -> int:
         """
         Generates the next ID for a tournament.
@@ -147,7 +168,7 @@ class Tournament:
         Returns:
             bool: True if the players were added successfully, False otherwise.
         """
-        players = Player.load_players()
+        players = Player.load_all_players()
         try:
             for chess_id in chess_ids:
                 player = next((p for p in players if p.chess_id == chess_id), None)
@@ -186,7 +207,7 @@ class Tournament:
         round_name = f"Round {self.current_round_number + 1}"
         round_instance = Round(round_name)
         # Get players objects from chess_id list
-        players_instance = Player.load_players()
+        players_instance = Player.load_all_players()
         players_object = [
             next((p for p in players_instance if p.chess_id == chess_id), None)
             for chess_id in self.players_list

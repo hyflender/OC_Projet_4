@@ -1,13 +1,21 @@
-from utils import get_user_input, get_valid_date, get_valid_rounds, get_user_choice
+import time
+from utils import (
+    get_user_input,
+    get_valid_date,
+    get_valid_rounds,
+    get_user_choice,
+    clear_console,
+)
 from tabulate import tabulate
 from models import Tournament, Player
+from typing import List
 
 # The menu for managing tournaments - This class is responsible for displaying the menu for managing tournaments.
 
 
 class TournamentView:
     @staticmethod
-    def display_tournament_menu():
+    def display_tournament_menu() -> None:
         """
         Displays the menu for managing tournaments.
         """
@@ -15,20 +23,30 @@ class TournamentView:
         print("----------------------------------------")
         print("Please select an option:")
         print("1. Create a new tournament")
-        print("2. Add Players on a tournament")
-        print("3. Start a tournament")
-        print("4. Record Match Result")
-        print("5. View all tournaments")
-        print("6. View tournament details")
-        print("7. Go back to main menu")
+        print("2. View and manage a selected tournament")
+        print("3. View all tournaments")
+        print("4. Go back to main menu")
+        print("----------------------------------------")
+
+    def display_tournament_sub_menu(self, tournament: Tournament) -> None:
+        """
+        Displays the menu for managing tournaments.
+        """
+        print(f"Menu to manage the {tournament.name}")
+        print("----------------------------------------")
+        print("Please select an option:")
+        print("1. Add Players on a tournament")
+        print(f"2. Start {tournament.name}")
+        print("3. Record Match Result")
+        print(f"4. View {tournament.name} details")
+        print("5. Go back to main menu")
         print("----------------------------------------")
 
     @staticmethod
-    def view_all_tournaments(tournaments):
+    def view_all_tournaments(tournaments: List[Tournament]) -> None:
         if not tournaments:
             print("No tournaments have been created yet.")
         else:
-
             tournament_data = [
                 {
                     "ID": tournament.id,
@@ -48,17 +66,46 @@ class TournamentView:
             print(tabulate(tournament_data, headers="keys", tablefmt="rounded_outline"))
 
     @staticmethod
-    def get_tournament_details():
-        """Get the tournament details from the user."""
+    def get_tournament_details() -> tuple[str, str, str, str, int]:
+        """
+        Get the tournament details from the user.
+
+        Prompts the user to enter the start date, end date, location,
+        description, and number of rounds for the tournament. Ensures
+        that the end date is after the start date.
+
+        Returns:
+            tuple: A tuple containing the start date, end date, location,
+                   description, and number of rounds.
+        """
         start_date = get_valid_date("Enter the start date (DD-MM-YYYY): ")
         end_date = get_valid_date("Enter the end date (DD-MM-YYYY): ")
         location = get_user_input("Enter the location of the tournament: ")
         description = get_user_input("Enter the description of the tournament: ")
-        rounds = get_valid_rounds("Enter the number of rounds (blank for default 4): ")
+        rounds = get_valid_rounds(
+            "Enter the number of rounds (leave blank for default 4): "
+        )
+
+        while end_date <= start_date:
+            print(
+                "End date must be after the start date. Please enter the dates again."
+            )
+            start_date = get_valid_date("Enter the start date (DD-MM-YYYY): ")
+            end_date = get_valid_date("Enter the end date (DD-MM-YYYY): ")
+
         return start_date, end_date, location, description, rounds
 
     @staticmethod
-    def generate_unique_tournament_name():
+    def generate_unique_tournament_name() -> str:
+        """
+        Generates a unique tournament name by appending a number to the base name "Tournament_".
+
+        This function loads all existing tournaments and checks their names to ensure the generated
+        name is unique. It increments a counter until a unique name is found.
+
+        Returns:
+            str: A unique tournament name.
+        """
         tournaments = Tournament.load_tournaments()
         base_name = "Tournament_"
         existing_names = {tournament.name for tournament in tournaments}
@@ -69,7 +116,7 @@ class TournamentView:
         print(f"Generated Tournament Name: {unique_name}")
         return unique_name
 
-    def get_tournament_id(self):
+    def get_tournament_id(self) -> int:
         tournaments = Tournament.load_tournaments()
         tournament_ids = [tournament.id for tournament in tournaments]
         while True:
@@ -84,12 +131,25 @@ class TournamentView:
             else:
                 print("Tournament ID not found. Please try again.")
 
-    def view_tournament_details(self, id: int) -> None:
+    def display_informations_message(self, message: str) -> None:
         """
-        Views the details of the tournament.
+        Display return message to the user.
         """
-        tournaments = Tournament.load_tournaments()
-        tournament = next((p for p in tournaments if p.id == id), None)
+        if message:
+            print("----------------------------------------")
+            print(f"{message} | Wait 3 seconds...")
+            print("----------------------------------------")
+            time.sleep(3)
+            clear_console()
+            self.message = None
+
+        else:
+            pass
+
+    def display_tournament_details(self, tournament: Tournament) -> None:
+        """
+        Display the details of the tournament.
+        """
         tournament_data = [
             {
                 "ID": tournament.id,
@@ -104,11 +164,16 @@ class TournamentView:
                 "Current round number": f"{tournament.current_round_number}/{tournament.rounds}",
             }
         ]
+        print("----------------------------------------")
         print("Tournament Details:")
+        print("----------------------------------------")
         print(tabulate(tournament_data, headers="keys", tablefmt="rounded_outline"))
+        print("\n")
 
         if tournament:
+            print("----------------------------------------")
             print("Players:")
+            print("----------------------------------------")
 
             player_data = [
                 {
@@ -118,7 +183,7 @@ class TournamentView:
                     "Score": player.score,
                 }
                 for player in (
-                    Player.load_player_by_id(chess_id)
+                    Player._load_player_by_chess_id(chess_id)
                     for chess_id in tournament.players_list
                 )
             ]
@@ -127,17 +192,19 @@ class TournamentView:
             )
             if player_data_sorted:
                 print(
-                    tabulate(player_data_sorted, headers="keys", tablefmt="rounded_outline")
+                    tabulate(
+                        player_data_sorted, headers="keys", tablefmt="rounded_outline"
+                    )
                 )
             else:
                 print("No players found for the given tournament ID.")
+                print("---------------------------------------- \n")
 
         if tournament:
             print("Matches:")
             match_data = []
             previous_round_index = None
             for round_index, round in enumerate(tournament.rounds_list, start=1):
-                # Add Clean line between each round
                 if (
                     previous_round_index is not None
                     and round_index != previous_round_index
@@ -155,7 +222,7 @@ class TournamentView:
                     player1 = next(
                         (
                             p
-                            for p in Player.load_players()
+                            for p in Player.load_all_players()
                             if p.chess_id == match.id_player1
                         ),
                         "Unknown",
@@ -163,7 +230,7 @@ class TournamentView:
                     player2 = next(
                         (
                             p
-                            for p in Player.load_players()
+                            for p in Player.load_all_players()
                             if p.chess_id == match.id_player2
                         ),
                         "Unknown",
@@ -174,7 +241,7 @@ class TournamentView:
                         winner = next(
                             (
                                 p
-                                for p in Player.load_players()
+                                for p in Player.load_all_players()
                                 if p.chess_id == match.winner
                             ),
                             "No winner yet",

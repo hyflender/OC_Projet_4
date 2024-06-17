@@ -1,6 +1,5 @@
-import subprocess
 from tabulate import tabulate
-from config import BASE_DIR, TEMPLATE_DIR, REPORT_DIR, FLAKE8_REPORT_DIR
+from config import BASE_DIR, TEMPLATE_DIR, REPORT_DIR
 from jinja2 import Environment, FileSystemLoader
 import webbrowser
 
@@ -24,9 +23,10 @@ class RapportsView:
         print(
             "4. Create a rapport list players on tournament (List all players present on a tournament)"
         )
-        print("5. Create a rapport match on tournament (List all matches of a tournament)")
-        print("6. Generate a Flake8 report")
-        print("7. Go back to main menu")
+        print(
+            "5. Create a rapport match on tournament (List all matches of a tournament)"
+        )
+        print("6. Go back to main menu")
         print("----------------------------------------")
 
     def generate_players_report(self):
@@ -96,7 +96,7 @@ class RapportsView:
         for tournament in tournaments:
             player_list = []
             for player_id in tournament.players_list:
-                player = Player.load_player_by_id(player_id)
+                player = Player._load_player_by_chess_id(player_id)
                 if player not in player_list:
                     player_list.append(player.to_dict())
             for tournament_dict in tournaments_dict:
@@ -119,7 +119,7 @@ class RapportsView:
             )
             data = [["First Name", "Last Name", "Chess ID", "Score"]]
             for player_id in tournament.players_list:
-                player = Player.load_player_by_id(player_id)
+                player = Player._load_player_by_chess_id(player_id)
                 data.append(
                     [player.first_name, player.last_name, player.chess_id, player.score]
                 )
@@ -133,25 +133,3 @@ class RapportsView:
 
         # Open the generated HTML report file in the default web browser
         webbrowser.open(str(report_path))
-
-    def generate_flake8_report(self):
-        """Generates an HTML Flake8 report for the project."""
-        try:
-            subprocess.run(
-                [
-                    "flake8",
-                    "--format=html",
-                    "--htmldir=" + str(FLAKE8_REPORT_DIR),
-                    str(BASE_DIR),
-                ],
-                check=True,
-            )
-            print("----------------------------------------")
-            print(f"Flake8 report saved to: {FLAKE8_REPORT_DIR}")
-            print("----------------------------------------")
-
-            # Open the generated HTML report file in the default web browser
-            webbrowser.open(str(FLAKE8_REPORT_DIR) + "/index.html")
-
-        except subprocess.CalledProcessError as e:
-            print("Error generating the Flake8 report:", e)
