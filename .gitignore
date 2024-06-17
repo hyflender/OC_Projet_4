@@ -4,6 +4,7 @@
 /GUI/
 /flake8_report/
 /logs/*
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
