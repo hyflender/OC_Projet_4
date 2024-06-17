@@ -24,7 +24,9 @@ class RapportsView:
         print(
             "4. Create a rapport list players on tournament (List all players present on a tournament)"
         )
-        print("5. Create a rapport match on tournament (List all matches of a tournament)")
+        print(
+            "5. Create a rapport match on tournament (List all matches of a tournament)"
+        )
         print("6. Generate a Flake8 report")
         print("7. Go back to main menu")
         print("----------------------------------------")
