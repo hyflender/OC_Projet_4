@@ -1,5 +1,5 @@
 <div align="center" id="top"> 
-<img alt="Logo" src="https://i.etsystatic.com/20162739/r/il/f381b0/1936652621/il_570xN.1936652621_2u8d.jpg">
+<img alt="Logo" src="http://ekladata.com/kT18gXR5dLqHw73aI97FhejQD2M.png">
 </div>
 
 <h1 align="center">Projet n°4 de OpenClassRoom Anthony PIAUGEARD</h1>
