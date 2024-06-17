@@ -12,7 +12,7 @@
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/hyflender/OC_Projet_4?color=56BEB8">
 
   <img alt="License" src="https://img.shields.io/github/license/hyflender/OC_Projet_4?color=56BEB8">
-  ![GitHub Created At](https://img.shields.io/github/created-at/hyflender/OC_Projet_4)
+  <img alt="GitHub Created At" src="https://img.shields.io/github/created-at/hyflender/OC_Projet_4">
 
 
 </p>
