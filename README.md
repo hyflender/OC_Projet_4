@@ -1,3 +1,22 @@
+<div align="center" id="top"> 
+<img alt="Logo" src="https://static.vecteezy.com/ti/vecteur-libre/p3/10639634-banniere-avec-pieces-d-echecs-sur-fond-noir-illustrationle-dessinee-a-la-main-pour-un-club-d-echecs-banniere-de-tournois-cadre-brochure-arriere-plan-du-jeu-intellectuel-croquis-illustrationle-vectoriel.jpg">
+</div>
+
+<h1 align="center">Projet n°4 de OpenClassRoom Anthony PIAUGEARD</h1>
+
+<p align="center">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/hyflender/OC_Projet_4?color=56BEB8">
+
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/hyflender/OC_Projet_4?color=56BEB8">
+
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/hyflender/OC_Projet_4?color=56BEB8">
+
+  <img alt="License" src="https://img.shields.io/github/license/hyflender/OC_Projet_4?color=56BEB8">
+
+</p>
+
+
+
 # Chess Tournament Manager
 
 Chess Tournament Manager is a Python-based application designed to help manage chess tournaments offline efficiently. This application supports various functionalities such as player registration, round management, match setup, and results recording.
@@ -25,13 +44,13 @@ To set up the Chess Tournament Manager on your local machine, follow these steps
 
    ```bash
    git clone https://github.com/hyflender/OC_Projet_4.git
-   cd chess-tournament-manager
+   cd OC_Projet_4
 
 2. **Set up a virtual environment (recommended):**
 
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   source venv/bin/activate  # On Windows use `./env/Scripts/Activate`
 
 3. **Install the dependencies:**
 
@@ -58,13 +77,3 @@ Make your changes and commit them (git commit -am 'Add some feature').
 Push to the branch (git push origin feature-branch).
 Create a new Pull Request.
 Please make sure to update tests as appropriate.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
-## Support
-For support, email ...@...
-
-
-This README is straightforward and provides the necessary information for anyone who wants to use, understand, or contribute to your project. You might need to adjust the URLs, contact information, and details specific to how you plan to manage contributions and community interactions.
