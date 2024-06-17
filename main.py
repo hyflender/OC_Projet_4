@@ -2,11 +2,9 @@ from controllers.global_controller import GlobalController
 from utils import Logger
 
 
-def main():
-
+def main() -> None:
     Logger.info("Initialize the global controller")
     controller = GlobalController()
-
     Logger.info("Run the application")
     controller.run()
 
