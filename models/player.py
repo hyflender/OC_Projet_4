@@ -132,11 +132,14 @@ class Player:
         Returns:
             A Player instance if found, None otherwise.
         """
-        players = Player.load_all_players()
-        for player in players:
-            if player.chess_id == chess_id:
-                return player
-        return None
+        return next(
+            (
+                player
+                for player in Player.load_all_players()
+                if player.chess_id == chess_id
+            ),
+            None,
+        )
 
     @staticmethod
     def load_players_sorted():
