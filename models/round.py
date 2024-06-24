@@ -8,6 +8,7 @@ class Round:
         self.start_time = datetime.now().isoformat()
         self.end_time = None
         self.matches = []
+        Match.reset_id_counter()
 
     def are_all_matches_completed(self):
         return all(match.winner is not None for match in self.matches)

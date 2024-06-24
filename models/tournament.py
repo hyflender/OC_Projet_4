@@ -206,6 +206,9 @@ class Tournament:
             for j in range(i + 1, len(players)):
                 if players[j] in matched_players:
                     continue
+                if self._have_played_before(players[i], players[j]):
+                    continue
+
                 match = Match(players[i], players[j])
                 round_instance.matches.append(match)
                 matched_players.update([players[i], players[j]])
@@ -233,3 +236,19 @@ class Tournament:
         print("New round started.")
         self.rounds_list.append(round_instance)
         self.current_round_number += 1
+
+    def _have_played_before(self, player1: Player, player2: Player) -> bool:
+        for round_instance in self.rounds_list:
+            for match in round_instance.matches:
+                if (
+                    match.id_player1 == player1.chess_id
+                    and match.id_player2 == player2.chess_id
+                ) or (
+                    match.id_player1 == player2.chess_id
+                    and match.id_player2 == player1.chess_id
+                ):
+
+                    return True
+
+        return False
+

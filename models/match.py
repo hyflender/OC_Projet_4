@@ -5,8 +5,7 @@ class Match:
     _id_counter = 0
 
     def __init__(self, id_player1, id_player2, winner=None):
-        type(self)._id_counter += 1
-        self.id = type(self)._id_counter
+        self.id = Match.get_next_id()
         self.id_player1 = id_player1.chess_id
         self.id_player2 = id_player2.chess_id
         self.winner = winner
@@ -24,8 +23,17 @@ class Match:
         player1 = Player.load_player_by_id(data["id_player1"])
         player2 = Player.load_player_by_id(data["id_player2"])
         match = Match(player1, player2, data["winner"])
-        match.id = data["id"]
+        
         return match
+
+    @staticmethod
+    def reset_id_counter():
+        Match._id_counter = 0
+
+    @staticmethod
+    def get_next_id():
+        Match._id_counter += 1
+        return Match._id_counter
 
     def end_match(self, winner, looser, equal=None):
         if self.winner is not None:
