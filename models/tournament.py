@@ -251,4 +251,3 @@ class Tournament:
                     return True
 
         return False
-
