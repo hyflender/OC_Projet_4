@@ -9,6 +9,7 @@ from utils import (
     get_valid_chess_id,
     get_valid_date,
     get_user_choice,
+    display_message,
 )
 
 
@@ -32,7 +33,7 @@ class PlayerController:
         new_player = Player(first_name, last_name, birth_date, chess_id)
         self.players.append(new_player)
         Player.save_players(self.players)
-        print(
+        display_message(
             f"Player {new_player.first_name} {new_player.last_name} created successfully."
         )
 
@@ -48,14 +49,16 @@ class PlayerController:
             )
             player = self._find_player_by_chess_id(chess_id)
             if not player:
-                print("Player not found with the given chess ID. Please try again.")
+                display_message(
+                    "Player not found with the given chess ID. Please try again."
+                )
         if player:
-            print(
+            display_message(
                 f"Player {player.first_name} {player.last_name} ({player.chess_id}) selected."
             )
             self._update_player_details(player)
         else:
-            print("Player not found with the given chess ID.")
+            display_message("Player not found with the given chess ID.")
 
     def update_score_player(self) -> None:
         """
@@ -70,14 +73,16 @@ class PlayerController:
             )
             player = self._find_player_by_chess_id(chess_id)
             if not player:
-                print("Player not found with the given chess ID. Please try again.")
+                display_message(
+                    "Player not found with the given chess ID. Please try again."
+                )
         if player:
-            print(
+            display_message(
                 f"Player {player.first_name} {player.last_name} ({player.chess_id}) selected."
             )
             self._update_player_score(player)
         else:
-            print("Player not found with the given chess ID.")
+            display_message("Player not found with the given chess ID.")
 
     def _find_player_by_chess_id(self, chess_id: str) -> Optional[Player]:
         """
@@ -106,7 +111,7 @@ class PlayerController:
 
         player.update_player(first_name, last_name, birth_date)
         Player.save_players(self.players)
-        print("Player updated successfully.")
+        display_message("Player updated successfully.")
 
     def _update_player_score(self, player: Player) -> None:
         """
@@ -120,7 +125,7 @@ class PlayerController:
         )
         player.update_score(new_score)
         Player.save_players(self.players)
-        print("Player's score updated successfully.")
+        display_message("Player's score updated successfully.")
 
     def run(self) -> None:
         """
@@ -144,5 +149,5 @@ class PlayerController:
             elif choice == 4:
                 self.view.display_all_players(self.players)
             elif choice == 5:
-                print("Exiting the player management menu.")
+                display_message("Exiting the player management menu.")
                 break

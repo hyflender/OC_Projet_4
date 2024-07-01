@@ -1,7 +1,7 @@
 from models import Tournament, Player
 from views import TournamentView, PlayerView
 
-from utils import Logger, get_user_choice, clear_console
+from utils import Logger, get_user_choice, clear_console, display_message
 
 
 class TournamentController:
@@ -32,7 +32,7 @@ class TournamentController:
         self.view.view_all_tournaments(self.tournaments)
         tournament_id = self.view.get_tournament_id()
         tournament = next((p for p in self.tournaments if p.id == tournament_id), None)
-        print(f"Tournament selected: {tournament.name}")
+        display_message(f"Tournament selected: {tournament.name}")
         self.player_view.display_all_players(self.players)
         chess_ids = input("Enter Chess IDs to add (comma separated): ").split(",")
         chess_ids = [chess_id.strip() for chess_id in chess_ids]
@@ -68,5 +68,5 @@ class TournamentController:
                 tournament_id = self.view.get_tournament_id()
                 self.view.view_tournament_details(tournament_id)
             elif choice == 7:
-                print("Exiting the tournament management menu.")
+                display_message("Exiting the tournament management menu.")
                 break

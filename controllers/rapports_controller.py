@@ -1,6 +1,5 @@
 from views import RapportsView
-
-from utils import clear_console, get_user_choice
+from utils import clear_console, get_user_choice, display_message
 
 
 class RapportsController:
@@ -26,6 +25,6 @@ class RapportsController:
                 # Rapport flake8-html dans un répertoire "flake8_rapport"
                 self.view.generate_flake8_report()
             elif choice == 5:
-                print("Exiting the rapports menu.")
+                display_message("Exiting the rapports menu.")
                 clear_console()
                 break

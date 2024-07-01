@@ -70,6 +70,16 @@ class Logger:
         logger.critical(message)
 
 
+def display_message(message: str) -> None:
+    """
+    Displays a message to the user.
+
+    Args:
+        message (str): The message to display to the user.
+    """
+    print(message)
+
+
 def get_user_input(prompt: str) -> str:
     """
     Prompts the user for input and returns the input as a string.

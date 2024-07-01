@@ -1,4 +1,4 @@
-from utils import Logger, get_user_choice, clear_console
+from utils import Logger, get_user_choice, clear_console, display_message
 
 from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
@@ -39,7 +39,7 @@ class GlobalController:
                 rapports_controller.run()
 
             elif choice == 4:
-                print("Exiting the program. See you soon !")
+                display_message("Exiting the program. See you soon !")
                 break
             else:
                 break
