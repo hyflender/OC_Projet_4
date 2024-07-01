@@ -23,7 +23,7 @@ class Match:
         player1 = Player.load_player_by_id(data["id_player1"])
         player2 = Player.load_player_by_id(data["id_player2"])
         match = Match(player1, player2, data["winner"])
-        
+
         return match
 
     @staticmethod
